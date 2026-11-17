@@ -1,1 +1,1 @@
-# agentic-dev-vue-starter
+# Agentic Dev Vue Starter
