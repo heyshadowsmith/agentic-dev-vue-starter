@@ -1,4 +1,4 @@
-import '@ui-sdk/core/web.css'
+import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
