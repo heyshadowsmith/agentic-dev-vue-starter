@@ -1,0 +1,3 @@
+@layer ui-sdk;
+@import 'tailwindcss';
+@import '@ui-sdk/core/web.css' layer(components);
