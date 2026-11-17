@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@ui-sdk/core':
+        specifier: 0.1.0-beta.6
+        version: 0.1.0-beta.6
+      '@ui-sdk/vue':
+        specifier: 0.1.0-beta.6
+        version: 0.1.0-beta.6(@ui-sdk/core@0.1.0-beta.6)(vue@3.5.45(typescript@6.0.3))
       pinia:
         specifier: ^4.0.3
         version: 4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3))
@@ -743,6 +749,25 @@ packages:
   '@typescript-eslint/visitor-keys@8.73.0':
     resolution: {integrity: sha512-k4lsFVpRZICbltkIEEH4hZRkwXkqDF1GHBpClKQOHQY+RkoZAAuyc1ci3I6p+CB6v3U4jaHIUshc4RzzQXZWLg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@ui-sdk/core@0.1.0-beta.6':
+    resolution: {integrity: sha512-4JDArOSaTDRArUs+XXojXVNS1kf1D/aOMan6GIp8J9+cwAdijCypbClApS2jBc4SxgZbJCIDHsMlFOIPyEv8+g==}
+
+  '@ui-sdk/vue@0.1.0-beta.6':
+    resolution: {integrity: sha512-J3iJ/FKu0yzSslRexy9UcIz8sq9jHurkkhFTB/fNhWyiwfQbjoQDfFJ8J6qTN6ptzzzweT069v0m4AzKxG9u0Q==}
+    peerDependencies:
+      '@nuxt/kit': ^4.0.0 || ^5.0.0-0
+      '@nuxt/schema': ^4.0.0 || ^5.0.0-0
+      '@ui-sdk/core': ^0.1.0-beta.6
+      nuxt: ^4.0.0 || ^5.0.0-0
+      vue: '>=3.5'
+    peerDependenciesMeta:
+      '@nuxt/kit':
+        optional: true
+      '@nuxt/schema':
+        optional: true
+      nuxt:
+        optional: true
 
   '@vitejs/plugin-vue@6.0.11':
     resolution: {integrity: sha512-m48lskIUJGlB6qUiYhDMI8nd2ngeidz2U4nKTjqI13cFMu5rH8JeEILPkDtK9Fk/TjBA2pkj8AlbenqDaKu+ww==}
@@ -2757,6 +2782,13 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.73.0
       eslint-visitor-keys: 5.0.1
+
+  '@ui-sdk/core@0.1.0-beta.6': {}
+
+  '@ui-sdk/vue@0.1.0-beta.6(@ui-sdk/core@0.1.0-beta.6)(vue@3.5.45(typescript@6.0.3))':
+    dependencies:
+      '@ui-sdk/core': 0.1.0-beta.6
+      vue: 3.5.45(typescript@6.0.3)
 
   '@vitejs/plugin-vue@6.0.11(vite@8.3.8(@types/node@24.19.2)(jiti@2.7.0))(vue@3.5.45(typescript@6.0.3))':
     dependencies:
