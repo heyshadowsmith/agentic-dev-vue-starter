@@ -10,6 +10,8 @@ To build a new component, also search `node_modules/@ui-sdk/vue/docs/core.md` by
 
 Commit messages are a Conventional Commits title only, with no scope, body or trailers, such as `feat: add login form`.
 
+On each commit, lint-staged fixes and checks the staged files with Oxlint, ESLint, markdownlint and Prettier (see `.lintstagedrc.json`), then Secretlint scans them. A commit fails if a problem can't be fixed automatically. CI runs the full checks again, including the type check, tests, archlint and Knip, which lint-staged doesn't run.
+
 ## Functional Core, Imperative Shell
 
 Put pure logic in `src/core/`. Everything else in `src/` is the shell: components, stores, the router and `main.ts`. The shell may import the core; the core may only import other core files, using `./` or `@/core/` paths.
