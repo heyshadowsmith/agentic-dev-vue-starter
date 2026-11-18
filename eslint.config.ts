@@ -16,6 +16,30 @@ import { workflowConfigs } from './eslint/workflows.ts'
 const codeFiles = ['**/*.{vue,ts,mts,tsx}']
 const testFiles = ['src/**/__tests__/*', 'src/**/*.{test,spec}.ts']
 
+const uiSdkControls = [
+  'Autocomplete',
+  'Checkbox',
+  'ColorPicker',
+  'Combobox',
+  'DateInput',
+  'DatePicker',
+  'FileInput',
+  'Input',
+  'NumberInput',
+  'OtpInput',
+  'PasswordInput',
+  'Radio',
+  'Rating',
+  'SegmentedControl',
+  'Select',
+  'Slider',
+  'Switch',
+  'Textarea',
+  'TimeInput',
+  'TokenInput',
+  'Toggle',
+]
+
 const codeConfigs = defineConfigWithVueTs(
   ...pluginVue.configs['flat/recommended'],
   ...pluginVueA11y.configs['flat/recommended'],
@@ -36,7 +60,34 @@ const codeConfigs = defineConfigWithVueTs(
   {
     name: 'app/accessibility',
     rules: {
-      'vuejs-accessibility/label-has-for': ['error', { required: { some: ['nesting', 'id'] } }],
+      'vuejs-accessibility/label-has-for': [
+        'error',
+        { required: { some: ['nesting', 'id'] }, controlComponents: uiSdkControls },
+      ],
+      'vuejs-accessibility/form-control-has-label': [
+        'error',
+        {
+          labelComponents: ['Field'],
+          controlComponents: uiSdkControls.map((name) =>
+            name.replaceAll(/([a-z])([A-Z])/g, '$1-$2').toLowerCase(),
+          ),
+        },
+      ],
+    },
+  },
+  {
+    name: 'app/unicorn-adjustments',
+    rules: {
+      'unicorn/no-array-sort': 'off',
+      'unicorn/no-array-reverse': 'off',
+      'unicorn/no-array-splice': 'off',
+      'unicorn/prefer-array-find': ['error', { checkFromLast: false }],
+      'unicorn/prefer-set-methods': 'off',
+      'unicorn/prefer-group-by': 'off',
+      'unicorn/prefer-promise-with-resolvers': 'off',
+      'unicorn/prefer-array-from-async': 'off',
+      'unicorn/consistent-boolean-name': 'off',
+      'unicorn/no-null': 'off',
     },
   },
   {
@@ -73,6 +124,7 @@ const codeConfigs = defineConfigWithVueTs(
     name: 'app/no-skipped-tests',
     files: testFiles,
     rules: {
+      'max-lines-per-function': 'off',
       'vitest/no-disabled-tests': 'error',
       'vitest/no-focused-tests': 'error',
       'vitest/warn-todo': 'error',
@@ -89,6 +141,15 @@ const codeConfigs = defineConfigWithVueTs(
           message: 'Do not branch in tests. Write one test per case.',
         },
       ],
+    },
+  },
+
+  {
+    name: 'app/test-setup',
+    files: ['src/__tests__/setup.ts'],
+    rules: {
+      'unicorn/no-global-object-property-assignment': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
     },
   },
 

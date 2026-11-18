@@ -55,6 +55,11 @@ ESLint finds `if`, `switch` and the conditional operator in a test.
 Write one test for each case.
 Use `toStrictEqual`, not `toEqual`, because `toEqual` ignores `undefined` properties and class types.
 
+`src/__tests__/setup.ts` turns on the ui-sdk strict mode, adds the jsdom stubs that ui-sdk needs and unmounts each component after its test.
+A development warning from ui-sdk makes the test fail.
+Only this file can assign to globals and contain empty functions.
+The 60-line function limit does not apply to test files.
+
 ## TypeScript
 
 Each tsconfig extends `tsconfig.strict.json`.
@@ -66,6 +71,11 @@ With `exactOptionalPropertyTypes`, you can omit an optional prop like `title?: s
 But you cannot give it the value `undefined`.
 If `undefined` is a correct value, declare the prop as `title?: string | undefined`.
 
+The app and the tests use the ES2022 library, because the build supports browsers that do not have ES2023.
+Thus some unicorn rules are off, because they ask for `toSorted`, `toReversed`, `toSpliced` or newer methods.
+Copy an array before you sort or reverse it, for example `[...items].sort()`.
+The unicorn rules `consistent-boolean-name` and `no-null` are also off, because Vue, the DOM and ui-sdk use `null`.
+
 `tsconfig.strict.json` also turns on `strictTemplates` for `vue-tsc`.
 The type check fails on unknown components, props, events and directives in templates.
 
@@ -75,6 +85,10 @@ ESLint examines Vue templates with the recommended rules of `eslint-plugin-vuejs
 For example, it finds images without `alt`, form controls without a label and click handlers on elements that a keyboard cannot use.
 A label can contain its control, or it can refer to the `id` of the control with `for`.
 The rules cannot find a `for` that refers to an `id` that does not exist.
+
+The rules know the ui-sdk form controls, for example `Select`, `Checkbox` and `DatePicker`.
+Put a ui-sdk control in a `Field` with a `FieldLabel`, or put it in a `<label>`.
+Do not rename a ui-sdk import to get past an accessibility rule.
 
 ## Architecture
 
