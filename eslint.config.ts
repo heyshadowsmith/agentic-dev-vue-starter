@@ -32,40 +32,54 @@ const configFileSyntax: CommentSyntax = {
   lineStartOnly: true,
 }
 
+function lineEnd(text: string, from: number): number {
+  const newline = text.indexOf('\n', from)
+  return newline === -1 ? text.length : newline
+}
+
+function quoteEnd(text: string, start: number): number {
+  const quote = text.charAt(start)
+  let index = start + 1
+  while (index < text.length && text.charAt(index) !== quote) {
+    index += text.charAt(index) === '\\' ? 2 : 1
+  }
+  return index + 1
+}
+
+function blockCommentEnd(text: string, start: number): number {
+  const close = text.indexOf('*/', start + 2)
+  return close === -1 ? text.length : close + 2
+}
+
+function startsLineComment(text: string, index: number, syntax: CommentSyntax): boolean {
+  const marker = syntax.lineMarkers.find((candidate) => text.startsWith(candidate, index))
+  if (!marker) return false
+  const before = text.slice(text.lastIndexOf('\n', index - 1) + 1, index)
+  if (syntax.lineStartOnly) return before.trim() === ''
+  return marker === '//' || before === '' || /\s$/.test(before)
+}
+
+function commentEnd(text: string, index: number, syntax: CommentSyntax): number | undefined {
+  if (syntax.block && text.startsWith('/*', index)) return blockCommentEnd(text, index)
+  if (startsLineComment(text, index, syntax)) return lineEnd(text, index)
+  return undefined
+}
+
 function findComments(text: string, syntax: CommentSyntax): [number, number][] {
   const spans: [number, number][] = []
-  let quote = ''
-  for (let index = 0; index < text.length; index++) {
-    const char = text.charAt(index)
-    if (quote) {
-      if (char === '\\') index++
-      else if (char === quote) quote = ''
+  let index = 0
+  while (index < text.length) {
+    if (syntax.quotes.includes(text.charAt(index))) {
+      index = quoteEnd(text, index)
       continue
     }
-    if (syntax.quotes.includes(char)) {
-      quote = char
+    const end = commentEnd(text, index, syntax)
+    if (end === undefined) {
+      index++
       continue
     }
-    if (syntax.block && text.startsWith('/*', index)) {
-      const close = text.indexOf('*/', index + 2)
-      const end = close === -1 ? text.length : close + 2
-      spans.push([index, end])
-      index = end - 1
-      continue
-    }
-    const marker = syntax.lineMarkers.find((candidate) => text.startsWith(candidate, index))
-    if (marker) {
-      const before = text.slice(text.lastIndexOf('\n', index - 1) + 1, index)
-      const startsComment = syntax.lineStartOnly
-        ? before.trim() === ''
-        : marker === '//' || before === '' || /\s$/.test(before)
-      if (startsComment) {
-        const newline = text.indexOf('\n', index)
-        const end = newline === -1 ? text.length : newline
-        spans.push([index, end])
-        index = end
-      }
-    }
+    spans.push([index, end])
+    index = end
   }
   return spans
 }
