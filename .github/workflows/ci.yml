@@ -41,6 +41,9 @@ jobs:
       - name: Lint Markdown
         run: pnpm check:markdown
 
+      - name: Check prose
+        run: pnpm check:prose
+
       - name: Lint
         run: pnpm check:lint
 
