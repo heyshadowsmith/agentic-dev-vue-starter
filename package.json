@@ -18,11 +18,13 @@
     "check:format": "prettier --check --experimental-cli .",
     "check:markdown": "markdownlint-cli2",
     "check:prose": "ste-lint --max-warnings 0",
+    "check:audit": "node scripts/audit.ts",
     "check:lint": "oxlint . && eslint .",
     "check:secrets": "secretlint \"**/*\"",
     "check:architecture": "archlint scan --no-cache",
     "check:dead-code": "knip --treat-config-hints-as-errors",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "node scripts/audit.ts --warn-only"
   },
   "dependencies": {
     "@ui-sdk/core": "0.1.0-beta.6",
@@ -87,7 +89,8 @@
       "eslint-plugin-functional>deepmerge-ts": "^8.0.0",
       "js-beautify>glob": "^14.0.2",
       "editorconfig>minimatch": "^11.0.1",
-      "micromark-extension-math>katex": "^0.18.2"
+      "micromark-extension-math>katex": "^0.18.2",
+      "eslint-plugin-sonarjs>minimatch": "^11.0.1"
     }
   }
 }

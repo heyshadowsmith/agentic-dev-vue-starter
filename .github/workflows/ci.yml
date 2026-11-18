@@ -33,7 +33,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Audit dependencies
-        run: pnpm audit --ignore-unfixable
+        run: pnpm check:audit
 
       - name: Scan for secrets
         run: pnpm check:secrets
