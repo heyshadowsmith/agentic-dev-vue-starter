@@ -150,6 +150,15 @@ The check runs at these times:
 - On each commit that changes `package.json` or `pnpm-lock.yaml`, and it stops the commit
 - In CI, and it stops the merge
 
+`pnpm-workspace.yaml` sets `minimumReleaseAge` to 1440 minutes.
+pnpm does not install a package version that is less than 24 hours old.
+If this setting stops an install, stop and ask the user.
+Do not add the package to `minimumReleaseAgeExclude`.
+
+`pnpm-workspace.yaml` also sets `strictDepBuilds`.
+An install fails if a dependency has an install script that nobody approved.
+Examine the script before you approve it.
+
 `pnpm.overrides` in `package.json` forces fixed versions of five transitive dependencies.
 Remove an override when its parent package uses a fixed version.
 
