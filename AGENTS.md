@@ -58,6 +58,9 @@ With `exactOptionalPropertyTypes`, you can omit an optional prop like `title?: s
 But you cannot give it the value `undefined`.
 If `undefined` is a correct value, declare the prop as `title?: string | undefined`.
 
+`tsconfig.strict.json` also turns on `strictTemplates` for `vue-tsc`.
+The type check fails on unknown components, props, events and directives in templates.
+
 ## Architecture
 
 `pnpm check:architecture` runs [archlint](https://github.com/archlinter/archlint) with `.archlint.yaml`.
