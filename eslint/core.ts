@@ -74,6 +74,7 @@ export const coreConfigs: Linter.Config[] = [
         { selector: 'AwaitExpression', message: 'src/core/ must be synchronous.' },
         { selector: 'ImportExpression', message: 'src/core/ may not import dynamically.' },
       ],
+      'unicorn/no-array-reduce': 'off',
       'functional/no-let': 'error',
       'functional/immutable-data': 'error',
       'functional/no-loop-statements': 'error',
