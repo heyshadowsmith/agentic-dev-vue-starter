@@ -30,6 +30,8 @@
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@commitlint/types": "^21.2.3",
+    "@eslint/css": "^2.0.1",
+    "@eslint/json": "^2.1.1",
     "@tailwindcss/vite": "^4.3.5",
     "@tsconfig/node24": "^24.0.5",
     "@types/jsdom": "^30.0.0",

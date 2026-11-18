@@ -1,23 +1,91 @@
 import { globalIgnores } from 'eslint/config'
+import type { Rule } from 'eslint'
+import type { AST } from 'vue-eslint-parser'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVue from 'eslint-plugin-vue'
 import pluginVitest from '@vitest/eslint-plugin'
 import pluginOxlint from 'eslint-plugin-oxlint'
 import skipFormatting from 'eslint-config-prettier/flat'
+import json from '@eslint/json'
+import css from '@eslint/css'
+import type { CSSRuleDefinition } from '@eslint/css'
 
-// To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
-// import { configureVueProject } from '@vue/eslint-config-typescript'
-// configureVueProject({ scriptLangs: ['ts', 'tsx'] })
-// More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
+const commentMessage =
+  'Comments are not allowed. Make the code say it, or put it in a commit message.'
 
-export default defineConfigWithVueTs(
-  {
-    name: 'app/files-to-lint',
-    files: ['**/*.{vue,ts,mts,tsx}'],
+const noCodeComments: Rule.RuleModule = {
+  meta: {
+    type: 'problem',
+    schema: [],
+    messages: { comment: commentMessage },
   },
+  create(context) {
+    const { sourceCode } = context
 
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+    return {
+      Program() {
+        for (const comment of sourceCode.getAllComments()) {
+          if (comment.loc) {
+            context.report({ loc: comment.loc, messageId: 'comment' })
+          }
+        }
 
+        const program = sourceCode.ast as unknown as AST.ESLintProgram
+        for (const comment of program.templateBody?.comments ?? []) {
+          context.report({ loc: comment.loc, messageId: 'comment' })
+        }
+
+        const fragment: AST.VDocumentFragment | null | undefined =
+          sourceCode.parserServices?.getDocumentFragment?.()
+        for (const node of fragment?.children ?? []) {
+          if (node.type !== 'VElement' || node.name !== 'style') continue
+          for (const child of node.children) {
+            if (child.type !== 'VText') continue
+            for (const match of child.value.matchAll(/\/\*[\s\S]*?\*\//g)) {
+              const start = child.range[0] + match.index
+              context.report({
+                loc: {
+                  start: sourceCode.getLocFromIndex(start),
+                  end: sourceCode.getLocFromIndex(start + match[0].length),
+                },
+                messageId: 'comment',
+              })
+            }
+          }
+        }
+      },
+    }
+  },
+}
+
+const noCssComments: CSSRuleDefinition = {
+  meta: {
+    type: 'problem',
+    messages: { comment: commentMessage },
+  },
+  create(context) {
+    return {
+      StyleSheet() {
+        for (const comment of context.sourceCode.comments ?? []) {
+          if (comment.loc) {
+            context.report({ loc: comment.loc, messageId: 'comment' })
+          }
+        }
+      },
+    }
+  },
+}
+
+const codeFiles = ['**/*.{vue,ts,mts,tsx}']
+
+const local = {
+  rules: {
+    'no-comments': noCodeComments,
+    'no-css-comments': noCssComments,
+  },
+}
+
+const codeConfigs = defineConfigWithVueTs(
   ...pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
 
@@ -28,43 +96,11 @@ export default defineConfigWithVueTs(
 
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
 
-  // Block suppressions. These come after the Oxlint config, which turns off ESLint
-  // rules that Oxlint covers, so it can't switch them off.
   {
-    name: 'app/no-suppressions',
-    linterOptions: {
-      noInlineConfig: true,
-    },
+    name: 'app/no-comments',
+    plugins: { local },
     rules: {
-      // Oxlint still honors disable comments, so ban them, along with other tools' ignores.
-      'no-warning-comments': [
-        'error',
-        {
-          location: 'anywhere',
-          terms: [
-            'eslint-disable',
-            'eslint-enable',
-            'oxlint-disable',
-            'oxlint-enable',
-            'prettier-ignore',
-            'secretlint-disable',
-            'istanbul ignore',
-            'v8 ignore',
-            'c8 ignore',
-          ],
-        },
-      ],
-      '@typescript-eslint/ban-ts-comment': [
-        'error',
-        {
-          'ts-check': false,
-          'ts-expect-error': true,
-          'ts-ignore': true,
-          'ts-nocheck': true,
-        },
-      ],
-      // Disable comments in Vue templates go through this rule, not noInlineConfig.
-      // Turning it off makes them do nothing.
+      'local/no-comments': 'error',
       'vue/comment-directive': 'off',
     },
   },
@@ -79,4 +115,31 @@ export default defineConfigWithVueTs(
   },
 
   skipFormatting,
-)
+).map((config) => (config.files ? config : { ...config, files: codeFiles }))
+
+export default [
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+  ...codeConfigs,
+  {
+    name: 'app/no-inline-config',
+    linterOptions: {
+      noInlineConfig: true,
+    },
+  },
+  {
+    name: 'app/json',
+    files: ['**/*.json'],
+    plugins: { json },
+    language: 'json/json',
+  },
+  {
+    name: 'app/css',
+    files: ['**/*.css'],
+    plugins: { css, local },
+    language: 'css/css',
+    languageOptions: { tolerant: true },
+    rules: {
+      'local/no-css-comments': 'error',
+    },
+  },
+]

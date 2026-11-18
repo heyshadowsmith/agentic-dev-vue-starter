@@ -1,2 +1,1 @@
-# Scan staged files for secrets before they reach history.
 git diff --cached --name-only --diff-filter=ACMR -z | xargs -0 -r pnpm exec secretlint
