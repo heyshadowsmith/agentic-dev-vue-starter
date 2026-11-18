@@ -14,7 +14,9 @@
     "lint": "run-s \"lint:*\"",
     "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
-    "format": "prettier --write --experimental-cli src/"
+    "format": "prettier --write --experimental-cli src/",
+    "check:format": "prettier --check --experimental-cli src/",
+    "check:lint": "oxlint . && eslint ."
   },
   "dependencies": {
     "@ui-sdk/core": "0.1.0-beta.6",
@@ -55,5 +57,6 @@
   },
   "engines": {
     "node": "^22.18.0 || >=24.12.0"
-  }
+  },
+  "packageManager": "pnpm@10.28.0"
 }
