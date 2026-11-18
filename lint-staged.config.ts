@@ -38,6 +38,7 @@ const checkProse = (files: readonly string[], log: Log) => {
 export default defineConfig({
   '*.{ts,mts,tsx,vue}': ['oxlint --fix', 'eslint --fix --no-warn-ignored', 'prettier --write'],
   '*.{css,json,yml,yaml,html}': ['eslint --fix --no-warn-ignored', 'prettier --write'],
+  '{package.json,pnpm-lock.yaml}': () => 'pnpm check:audit',
   '*.md': {
     title: 'markdownlint --fix, prettier --write, then ste-lint',
     task: (files, { log }) => {
