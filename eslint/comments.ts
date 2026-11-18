@@ -203,7 +203,7 @@ const parsedFileTypes = [
   ['app/shell', [`.husky/{${hookNames}}`], hashCommentParser(shellSyntax)],
   [
     'app/config-files',
-    ['**/.gitignore', '**/.gitattributes', '**/.editorconfig'],
+    ['**/.gitignore', '**/.gitattributes', '**/.editorconfig', '**/.prettierignore'],
     hashCommentParser(configFileSyntax),
   ],
 ] as const
