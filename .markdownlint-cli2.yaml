@@ -3,6 +3,9 @@ config:
 
 noInlineConfig: true
 
+customRules:
+  - markdownlint-sentences-per-line
+
 globs:
   - '**/*.md'
 

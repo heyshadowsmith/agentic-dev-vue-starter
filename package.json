@@ -61,6 +61,7 @@
     "knip": "^6.45.1",
     "lint-staged": "^17.6.1",
     "markdownlint-cli2": "^0.24.1",
+    "markdownlint-sentences-per-line": "^0.1.7",
     "npm-run-all2": "^9.0.3",
     "oxlint": "~1.82.0",
     "prettier": "3.9.6",

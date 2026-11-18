@@ -114,6 +114,9 @@ importers:
       markdownlint-cli2:
         specifier: ^0.24.1
         version: 0.24.1
+      markdownlint-sentences-per-line:
+        specifier: ^0.1.7
+        version: 0.1.7(markdownlint@0.42.1)
       npm-run-all2:
         specifier: ^9.0.3
         version: 9.0.4
@@ -2453,6 +2456,15 @@ packages:
     engines: {node: '>=22'}
     hasBin: true
 
+  markdownlint-rule-helpers@0.31.0:
+    resolution: {integrity: sha512-UgVL6v1CB+5ds7W2IBTU6yVDRDH1gSGoWWTRrwZmniU/4AKO8nz0d42gySOIVllfRxzaIMn7Gei4u65y6Rcs2A==}
+    engines: {node: '>=22'}
+
+  markdownlint-sentences-per-line@0.1.7:
+    resolution: {integrity: sha512-Rwt3SNhx8CkhXzfa+hy2d2M4tTIzVmoPyjYMV5cODRnJzTa4iFZYhmh14e12JyrgVSPjH3bWEdL4X1UUTLZ8lQ==}
+    peerDependencies:
+      markdownlint: ^0.37.0 || ^0.39.0 || ^0.40.0 || ^0.41.0
+
   markdownlint@0.42.1:
     resolution: {integrity: sha512-Otolm9JX12iO2NG5cetlKfzGygpiLSlHuqXKxoT6HGhN5HtbxprJPicKZqqCQd88qOvUi/TEs3o1AmcYioVscA==}
     engines: {node: '>=22'}
@@ -2920,6 +2932,10 @@ packages:
     resolution: {integrity: sha512-9lpSSU4Mly3mrtruwLs1eLK6+gzbzqeBFwRNjIjE+9LuDpWdYctrQlQ3ej1Ilgi7gknpsTRnPoLP8DpCHqHIJw==}
     engines: {node: '>=10'}
     hasBin: true
+
+  sentences-per-line@0.5.6:
+    resolution: {integrity: sha512-Nr8nl/K1oqxcSX5jle3/dDlQyej1DYzhoSTbWRMNECV/NTl5KTIjxhgElmn167PEAqgMEdaXMRQo7kaGbXUS5Q==}
+    engines: {node: '>=22.14.0'}
 
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
@@ -5664,6 +5680,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  markdownlint-rule-helpers@0.31.0: {}
+
+  markdownlint-sentences-per-line@0.1.7(markdownlint@0.42.1):
+    dependencies:
+      markdownlint: 0.42.1
+      markdownlint-rule-helpers: 0.31.0
+      sentences-per-line: 0.5.6
+
   markdownlint@0.42.1:
     dependencies:
       micromark: 4.0.3
@@ -6231,6 +6255,8 @@ snapshots:
   semver@6.3.2: {}
 
   semver@7.8.6: {}
+
+  sentences-per-line@0.5.6: {}
 
   shebang-command@2.0.0:
     dependencies:

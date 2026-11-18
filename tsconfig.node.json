@@ -6,6 +6,7 @@
     "cypress.config.*",
     "eslint.config.*",
     "eslint/**/*.ts",
+    "lint-staged.config.*",
     "commitlint.config.*"
   ],
   "compilerOptions": {

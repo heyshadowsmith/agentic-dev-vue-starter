@@ -1,5 +1,0 @@
-{
-  "*.{ts,mts,tsx,vue}": ["oxlint --fix", "eslint --fix --no-warn-ignored", "prettier --write"],
-  "*.{css,json,yml,yaml,html}": ["eslint --fix --no-warn-ignored", "prettier --write"],
-  "*.md": ["markdownlint-cli2 --no-globs --fix", "prettier --write"]
-}
