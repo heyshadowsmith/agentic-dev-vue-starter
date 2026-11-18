@@ -7,6 +7,7 @@ import skipFormatting from 'eslint-config-prettier/flat'
 import unicorn from 'eslint-plugin-unicorn'
 import { configs as sonarjsConfigs } from 'eslint-plugin-sonarjs'
 import json from '@eslint/json'
+import actionlint from 'eslint-plugin-actionlint'
 import { commentConfigs, commentPlugin } from './eslint/comments.ts'
 import { coreConfigs } from './eslint/core.ts'
 
@@ -94,4 +95,5 @@ export default [
     language: 'json/json',
   },
   ...commentConfigs,
+  actionlint.configs.actionlintOnly,
 ]
