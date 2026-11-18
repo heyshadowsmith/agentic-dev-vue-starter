@@ -88,6 +88,7 @@ const codeConfigs = defineConfigWithVueTs(
       'unicorn/prefer-array-from-async': 'off',
       'unicorn/consistent-boolean-name': 'off',
       'unicorn/no-null': 'off',
+      'unicorn/no-array-callback-reference': 'off',
     },
   },
   {
@@ -125,6 +126,9 @@ const codeConfigs = defineConfigWithVueTs(
     files: testFiles,
     rules: {
       'max-lines-per-function': 'off',
+      'unicorn/no-await-expression-member': 'off',
+      'unicorn/no-top-level-assignment-in-function': 'off',
+      'unicorn/max-nested-calls': 'off',
       'vitest/no-disabled-tests': 'error',
       'vitest/no-focused-tests': 'error',
       'vitest/warn-todo': 'error',

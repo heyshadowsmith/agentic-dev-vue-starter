@@ -38,6 +38,8 @@ It cannot contain these items:
 - `throw` or `try`
 - Functions with no parameters, or functions that give no value
 
+Use `map`, `filter` and `reduce` in the core, because loops are not permitted there.
+`reduce` is permitted only in `src/core/`.
 Give time, random values and data to the core from the shell.
 Do not put components in `src/core/`.
 These style rules do not apply to tests in `src/core/`.
@@ -59,6 +61,8 @@ Use `toStrictEqual`, not `toEqual`, because `toEqual` ignores `undefined` proper
 A development warning from ui-sdk makes the test fail.
 Only this file can assign to globals and contain empty functions.
 The 60-line function limit does not apply to test files.
+Some unicorn rules about style are also off in test files, for example `max-nested-calls`.
+An `expect` can have a message as its second argument, for example `expect(result.ok, result.error).toBe(true)`.
 
 ## TypeScript
 
