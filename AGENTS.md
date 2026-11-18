@@ -79,6 +79,23 @@ For this reason, its dead-code detectors are off, and Knip finds dead code.
 archlint does not read aliases from this tsconfig setup.
 When you add a path alias to `tsconfig.app.json`, also add it to `aliases` in `.archlint.yaml`.
 
+## Workflows
+
+ESLint examines the GitHub Actions workflows in `.github/workflows/`.
+It runs the official actionlint through `eslint-plugin-actionlint`.
+The plugin downloads actionlint from GitHub Releases on the first run, and it verifies the checksum.
+`eslint/workflows.ts` adds these security rules:
+
+- Pin each `uses` to a full 40-character commit SHA.
+- Do not put `${{ }}` expressions in `run` scripts, and give the value to the script with `env`.
+- Set `persist-credentials: false` on each `actions/checkout` step.
+- Declare top-level `permissions` in each workflow.
+- Do not use the `pull_request_target` trigger.
+
+CI also runs zizmor, which does more security audits than the local rules.
+Comments are not permitted in YAML, thus a pinned SHA does not show its version.
+To find the version, look up the SHA on GitHub.
+
 ## Dead code
 
 `pnpm check:dead-code` runs [Knip](https://knip.dev).

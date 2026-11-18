@@ -10,6 +10,7 @@ import json from '@eslint/json'
 import actionlint from 'eslint-plugin-actionlint'
 import { commentConfigs, commentPlugin } from './eslint/comments.ts'
 import { coreConfigs } from './eslint/core.ts'
+import { workflowConfigs } from './eslint/workflows.ts'
 
 const codeFiles = ['**/*.{vue,ts,mts,tsx}']
 const testFiles = ['src/**/__tests__/*', 'src/**/*.{test,spec}.ts']
@@ -96,4 +97,5 @@ export default [
   },
   ...commentConfigs,
   actionlint.configs.actionlintOnly,
+  ...workflowConfigs,
 ]
