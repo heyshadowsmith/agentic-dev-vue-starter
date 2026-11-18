@@ -23,3 +23,9 @@ Core code needs 100% test coverage for lines, branches, functions and statements
 Every tsconfig extends `tsconfig.strict.json`, which adds checks beyond `strict`, such as `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess` and `erasableSyntaxOnly`, which bans enums and namespaces. Change strictness there, not in the individual tsconfigs.
 
 With `exactOptionalPropertyTypes`, an optional prop like `title?: string` can be left out but can't be passed `undefined`. If `undefined` is a valid value, declare it as `title?: string | undefined`.
+
+## Architecture
+
+`pnpm check:architecture` runs [archlint](https://github.com/archlinter/archlint) with `.archlint.yaml`, and CI fails on any finding: cycles, layer violations (`src/core/` may only import `src/core/`), complexity over 15, nesting deeper than 4, long parameter lists, large files, god modules, barrel files, code clones and side-effect imports.
+
+archlint can't read `.vue` files, so imports made only from components are invisible to it. Its dead-code detectors are off for that reason. When you add a path alias to `tsconfig.app.json`, add it to `aliases` in `.archlint.yaml` too, because archlint doesn't read aliases from this tsconfig setup.

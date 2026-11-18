@@ -18,6 +18,7 @@
     "check:format": "prettier --check --experimental-cli src/",
     "check:lint": "oxlint . && eslint .",
     "check:secrets": "secretlint \"**/*\"",
+    "check:architecture": "archlint scan --no-cache",
     "prepare": "husky"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "vue-router": "^5.3.1"
   },
   "devDependencies": {
+    "@archlinter/cli": "0.17.1",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@commitlint/types": "^21.2.3",

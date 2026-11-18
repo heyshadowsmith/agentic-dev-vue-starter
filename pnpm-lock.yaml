@@ -24,6 +24,9 @@ importers:
         specifier: ^5.3.1
         version: 5.5.1(@vue/compiler-sfc@3.5.45)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(rolldown@1.2.19)(vite@8.3.8(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1))(vue@3.5.45(typescript@6.0.3))
     devDependencies:
+      '@archlinter/cli':
+        specifier: 0.17.1
+        version: 0.17.1
       '@commitlint/cli':
         specifier: ^21.2.4
         version: 21.2.4(conventional-commits-parser@7.1.4)(typescript@6.0.3)
@@ -137,6 +140,41 @@ importers:
         version: 2.1.0
 
 packages:
+
+  '@archlinter/cli-darwin-arm64@0.17.1':
+    resolution: {integrity: sha512-Q4IELHHqL3O+r1mPd044BImSQxME4WbGJeJba5gO01EDWXMEVt5vzaXUZTet5pMw/4TLzY6tC3gUss9jgXJG0w==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@archlinter/cli-darwin-x64@0.17.1':
+    resolution: {integrity: sha512-6xrF4psD/xva5k1Erq5CDQsjk5aOZT7bGpBeFpAve4NYF6cRzh6RUENyhMHIQLxTAouB3UysYfS7WedkBsYbEA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@archlinter/cli-linux-arm64@0.17.1':
+    resolution: {integrity: sha512-SPjFRH6kfsaZ4JhF/YEluZIcgXUd/tfmYI0znlLc+qiWbKFtnb1AC2J03GCxeyEkp0hKPAAbVf/5dDcnfzrpwA==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@archlinter/cli-linux-x64-musl@0.17.1':
+    resolution: {integrity: sha512-h4398sCbI1EDnYjZ6Axfuu4jfgqmn7rV3RZE1DRiGuS5t24fILN18phrZMK8polKYsCq3hfddwbgUhB/0pKiyQ==}
+    cpu: [x64]
+    os: [linux]
+
+  '@archlinter/cli-linux-x64@0.17.1':
+    resolution: {integrity: sha512-GnT5pLzKtmtyuDaFeH2VjAeiMNbOl9a9ZhUPcQfecNT/Rk+cm76uw6Fn8Ykm96ToFP/j8WgcE5M/QcTT+xpJ0A==}
+    cpu: [x64]
+    os: [linux]
+
+  '@archlinter/cli-win32-x64@0.17.1':
+    resolution: {integrity: sha512-iLSk6CywpiKfNDx4bNeX/DgQnNdzFz7ILLehxMgDLRkrxeyWrU9ycQw36b/E8pbWaSyGmZathR+2WUIC8rtlAQ==}
+    cpu: [x64]
+    os: [win32]
+
+  '@archlinter/cli@0.17.1':
+    resolution: {integrity: sha512-OVnSRcVChoZEIytfOt5fulK5Ex3XKvqyOAYEZQoXbkZgUEhB7BNMmNADMYVY3mK4n9pVGlMEUgFVjloeaz3V7Q==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   '@asamuzakjp/css-color@7.2.0':
     resolution: {integrity: sha512-+JNLVlzePs1XiBT5s9aVkEjOePRoB//tk3bc69BGdzQCz7EICVSQuVPZu6tjc7vAJxBx5fama67LbOltwnXzPQ==}
@@ -2783,6 +2821,33 @@ packages:
     engines: {node: '>=10'}
 
 snapshots:
+
+  '@archlinter/cli-darwin-arm64@0.17.1':
+    optional: true
+
+  '@archlinter/cli-darwin-x64@0.17.1':
+    optional: true
+
+  '@archlinter/cli-linux-arm64@0.17.1':
+    optional: true
+
+  '@archlinter/cli-linux-x64-musl@0.17.1':
+    optional: true
+
+  '@archlinter/cli-linux-x64@0.17.1':
+    optional: true
+
+  '@archlinter/cli-win32-x64@0.17.1':
+    optional: true
+
+  '@archlinter/cli@0.17.1':
+    optionalDependencies:
+      '@archlinter/cli-darwin-arm64': 0.17.1
+      '@archlinter/cli-darwin-x64': 0.17.1
+      '@archlinter/cli-linux-arm64': 0.17.1
+      '@archlinter/cli-linux-x64': 0.17.1
+      '@archlinter/cli-linux-x64-musl': 0.17.1
+      '@archlinter/cli-win32-x64': 0.17.1
 
   '@asamuzakjp/css-color@7.2.0':
     dependencies:

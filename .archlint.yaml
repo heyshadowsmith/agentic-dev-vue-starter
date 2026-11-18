@@ -1,0 +1,31 @@
+aliases:
+  '@/*': 'src/*'
+
+git:
+  enabled: false
+
+rules:
+  barrel_file: high
+  circular_type_deps: high
+  code_clone: high
+  cognitive_complexity: high
+  cyclic_dependency: high
+  cyclomatic_complexity: high
+  deep_nesting: high
+  god_module: high
+  large_file: high
+  long_params: high
+  side_effect_import: high
+  test_leakage: high
+  dead_code: off
+  dead_symbols: off
+  orphan_types: off
+  layer_violation:
+    severity: high
+    layers:
+      - name: core
+        path: 'src/core/**'
+        allowed_imports: []
+      - name: shell
+        path: 'src/**'
+        allowed_imports: [core]

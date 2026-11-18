@@ -41,6 +41,9 @@ jobs:
       - name: Lint
         run: pnpm check:lint
 
+      - name: Check architecture
+        run: pnpm check:architecture
+
       - name: Type check and build
         run: pnpm build
 
