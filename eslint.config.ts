@@ -13,7 +13,7 @@ import * as yamlParser from 'yaml-eslint-parser'
 import * as htmlParser from '@html-eslint/parser'
 
 const commentMessage =
-  'Comments are not allowed. Make the code say it, or put it in a commit message.'
+  'Comments are not allowed. Make the code say it, or write it in a Markdown file.'
 
 interface CommentSyntax {
   lineMarkers: string[]
