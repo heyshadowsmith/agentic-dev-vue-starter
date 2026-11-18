@@ -119,13 +119,20 @@ Thus it does not find words that STE does not approve.
 
 ## Dependencies
 
-CI runs `pnpm audit --ignore-unfixable` after the install.
-CI fails if a dependency has a known vulnerability with a fix.
-CI ignores a vulnerability without a fix, and it examines that vulnerability again on each run.
-When a fix becomes available, CI fails until you update the dependency.
+`pnpm check:audit` runs `scripts/audit.ts`.
+The script finds each known vulnerability that has a fixed version.
+It ignores a vulnerability without a fix, and it examines that vulnerability again on each run.
+When a fix becomes available, the check fails until you update the dependency.
 
-`pnpm.overrides` in `package.json` forces fixed versions of four transitive dependencies.
+The check runs at these times:
+
+- After each `pnpm install` or `pnpm add`, as a warning only
+- On each commit that changes `package.json` or `pnpm-lock.yaml`, and it stops the commit
+- In CI, and it stops the merge
+
+`pnpm.overrides` in `package.json` forces fixed versions of five transitive dependencies.
 Remove an override when its parent package uses a fixed version.
 
-Do not commit `pnpm.auditConfig` in `package.json`.
-A local run of `pnpm audit --ignore-unfixable` adds that entry, and it ignores the vulnerability permanently.
+Do not use `pnpm audit --ignore-unfixable`.
+It writes `pnpm.auditConfig` to `package.json`, and that entry ignores the vulnerability permanently.
+Also, its idea of "unfixable" is different, and it ignored a vulnerability with a fix in this project.
