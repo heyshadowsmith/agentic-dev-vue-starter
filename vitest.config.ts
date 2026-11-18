@@ -8,6 +8,17 @@ export default mergeConfig(
     test: {
       environment: 'jsdom',
       root: fileURLToPath(new URL('./', import.meta.url)),
+      coverage: {
+        provider: 'v8',
+        include: ['src/core/**/*.{ts,mts,tsx}'],
+        exclude: ['src/core/**/__tests__/**', 'src/core/**/*.{test,spec}.{ts,mts,tsx}'],
+        thresholds: {
+          lines: 100,
+          branches: 100,
+          functions: 100,
+          statements: 100,
+        },
+      },
     },
   }),
 )
