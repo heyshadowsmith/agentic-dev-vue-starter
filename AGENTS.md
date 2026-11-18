@@ -9,3 +9,9 @@ To build a new component, also search `node_modules/@ui-sdk/vue/docs/core.md` by
 ## Commits
 
 Commit messages are a Conventional Commits title only, with no scope, body or trailers, such as `feat: add login form`.
+
+## Functional Core, Imperative Shell
+
+Put pure logic in `src/core/`. Everything else in `src/` is the shell: components, stores, the router and `main.ts`. The shell may import the core; the core may only import other core files, using `./` or `@/core/` paths.
+
+Core code is synchronous and pure: no Vue, Pinia, router, ui-sdk or npm imports, no browser or timer globals, no `Date.now()`, `new Date()` or `Math.random()`, no `let`, mutation, loops, classes, `throw` or `try`, and no functions that take no parameters or return nothing. Pass time, randomness and data in from the shell. Components never go in `src/core/`. Tests under `src/core/` are exempt from these style rules.
