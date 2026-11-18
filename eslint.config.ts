@@ -1,5 +1,5 @@
 import { globalIgnores } from 'eslint/config'
-import type { Rule } from 'eslint'
+import type { Linter, Rule } from 'eslint'
 import type { AST } from 'vue-eslint-parser'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVue from 'eslint-plugin-vue'
@@ -9,9 +9,99 @@ import skipFormatting from 'eslint-config-prettier/flat'
 import json from '@eslint/json'
 import css from '@eslint/css'
 import type { CSSRuleDefinition } from '@eslint/css'
+import * as yamlParser from 'yaml-eslint-parser'
+import * as htmlParser from '@html-eslint/parser'
 
 const commentMessage =
   'Comments are not allowed. Make the code say it, or put it in a commit message.'
+
+interface CommentSyntax {
+  lineMarkers: string[]
+  block?: boolean
+  quotes: string
+  lineStartOnly?: boolean
+}
+
+const jsSyntax: CommentSyntax = { lineMarkers: ['//'], block: true, quotes: '\'"`' }
+const cssSyntax: CommentSyntax = { lineMarkers: [], block: true, quotes: '\'"' }
+const shellSyntax: CommentSyntax = { lineMarkers: ['#'], quotes: '\'"' }
+const configFileSyntax: CommentSyntax = {
+  lineMarkers: ['#', ';'],
+  quotes: '',
+  lineStartOnly: true,
+}
+
+function findComments(text: string, syntax: CommentSyntax): [number, number][] {
+  const spans: [number, number][] = []
+  let quote = ''
+  for (let index = 0; index < text.length; index++) {
+    const char = text.charAt(index)
+    if (quote) {
+      if (char === '\\') index++
+      else if (char === quote) quote = ''
+      continue
+    }
+    if (syntax.quotes.includes(char)) {
+      quote = char
+      continue
+    }
+    if (syntax.block && text.startsWith('/*', index)) {
+      const close = text.indexOf('*/', index + 2)
+      const end = close === -1 ? text.length : close + 2
+      spans.push([index, end])
+      index = end - 1
+      continue
+    }
+    const marker = syntax.lineMarkers.find((candidate) => text.startsWith(candidate, index))
+    if (marker) {
+      const before = text.slice(text.lastIndexOf('\n', index - 1) + 1, index)
+      const startsComment = syntax.lineStartOnly
+        ? before.trim() === ''
+        : marker === '//' || before === '' || /\s$/.test(before)
+      if (startsComment) {
+        const newline = text.indexOf('\n', index)
+        const end = newline === -1 ? text.length : newline
+        spans.push([index, end])
+        index = end
+      }
+    }
+  }
+  return spans
+}
+
+function hashCommentParser(syntax: CommentSyntax): Linter.Parser {
+  return {
+    meta: { name: 'hash-comments' },
+    parseForESLint(text: string) {
+      const locAt = (index: number) => {
+        const lines = text.slice(0, index).split('\n')
+        return { line: lines.length, column: lines.at(-1)?.length ?? 0 }
+      }
+      const comments = findComments(text, syntax).map(([start, end]) => ({
+        type: 'Line' as const,
+        value: text.slice(start, end),
+        range: [start, end] as [number, number],
+        loc: { start: locAt(start), end: locAt(end) },
+      }))
+      return {
+        ast: {
+          type: 'Program' as const,
+          body: [],
+          sourceType: 'script' as const,
+          comments,
+          tokens: [],
+          range: [0, text.length] as [number, number],
+          loc: { start: { line: 1, column: 0 }, end: locAt(text.length) },
+        },
+      }
+    },
+  }
+}
+
+interface TextNode {
+  value: string
+  range: [number, number]
+}
 
 const noCodeComments: Rule.RuleModule = {
   meta: {
@@ -21,6 +111,23 @@ const noCodeComments: Rule.RuleModule = {
   },
   create(context) {
     const { sourceCode } = context
+
+    const reportSpans = (offset: number, text: string, syntax: CommentSyntax) => {
+      for (const [start, end] of findComments(text, syntax)) {
+        context.report({
+          loc: {
+            start: sourceCode.getLocFromIndex(offset + start),
+            end: sourceCode.getLocFromIndex(offset + end),
+          },
+          messageId: 'comment',
+        })
+      }
+    }
+
+    const reportEmbedded = (syntax: CommentSyntax) => (node: unknown) => {
+      const { value, range } = node as TextNode
+      reportSpans(range[0], value, syntax)
+    }
 
     return {
       Program() {
@@ -40,20 +147,12 @@ const noCodeComments: Rule.RuleModule = {
         for (const node of fragment?.children ?? []) {
           if (node.type !== 'VElement' || node.name !== 'style') continue
           for (const child of node.children) {
-            if (child.type !== 'VText') continue
-            for (const match of child.value.matchAll(/\/\*[\s\S]*?\*\//g)) {
-              const start = child.range[0] + match.index
-              context.report({
-                loc: {
-                  start: sourceCode.getLocFromIndex(start),
-                  end: sourceCode.getLocFromIndex(start + match[0].length),
-                },
-                messageId: 'comment',
-              })
-            }
+            if (child.type === 'VText') reportSpans(child.range[0], child.value, cssSyntax)
           }
         }
       },
+      ScriptTagContent: reportEmbedded(jsSyntax),
+      StyleTagContent: reportEmbedded(cssSyntax),
     }
   },
 }
@@ -118,7 +217,13 @@ const codeConfigs = defineConfigWithVueTs(
 ).map((config) => (config.files ? config : { ...config, files: codeFiles }))
 
 export default [
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+  globalIgnores([
+    '**/dist/**',
+    '**/dist-ssr/**',
+    '**/coverage/**',
+    '.husky/_/**',
+    'pnpm-lock.yaml',
+  ]),
   ...codeConfigs,
   {
     name: 'app/no-inline-config',
@@ -142,4 +247,28 @@ export default [
       'local/no-css-comments': 'error',
     },
   },
+  ...(
+    [
+      ['app/yaml', ['**/*.{yml,yaml}'], yamlParser],
+      ['app/html', ['**/*.html'], htmlParser],
+      [
+        'app/shell',
+        [
+          '.husky/{applypatch-msg,pre-applypatch,post-applypatch,pre-commit,pre-merge-commit,prepare-commit-msg,commit-msg,post-commit,pre-rebase,post-checkout,post-merge,pre-push,pre-auto-gc,post-rewrite}',
+        ],
+        hashCommentParser(shellSyntax),
+      ],
+      [
+        'app/config-files',
+        ['**/.gitignore', '**/.gitattributes', '**/.editorconfig'],
+        hashCommentParser(configFileSyntax),
+      ],
+    ] as const
+  ).map(([name, files, parser]) => ({
+    name,
+    files: [...files],
+    plugins: { local },
+    languageOptions: { parser },
+    rules: { 'local/no-comments': 'error' as const },
+  })),
 ]
