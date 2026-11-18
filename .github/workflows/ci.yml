@@ -35,6 +35,9 @@ jobs:
       - name: Audit dependencies
         run: pnpm check:audit
 
+      - name: Check for duplicate dependencies
+        run: pnpm check:dedupe
+
       - name: Scan for secrets
         run: pnpm check:secrets
 

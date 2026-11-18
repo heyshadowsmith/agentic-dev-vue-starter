@@ -47,6 +47,14 @@ Run `pnpm test:coverage` to check the coverage.
 CI also runs it.
 The tool does not measure the shell.
 
+## Tests
+
+A test must contain an assertion, and each `expect` must be in a test.
+Oxlint finds a test without an assertion, a conditional `expect` and an `expect` without a matcher.
+ESLint finds `if`, `switch` and the conditional operator in a test.
+Write one test for each case.
+Use `toStrictEqual`, not `toEqual`, because `toEqual` ignores `undefined` properties and class types.
+
 ## TypeScript
 
 Each tsconfig extends `tsconfig.strict.json`.
@@ -165,6 +173,12 @@ Do not add the package to `minimumReleaseAgeExclude`.
 `pnpm-workspace.yaml` also sets `strictDepBuilds`.
 An install fails if a dependency has an install script that nobody approved.
 Examine the script before you approve it.
+
+`pnpm check:dedupe` runs `pnpm dedupe --check`.
+It fails if `pnpm dedupe` can remove a duplicate version from `pnpm-lock.yaml`.
+It also fails if the lock file contains a version that is less than 24 hours old.
+Run `pnpm dedupe` to correct the lock file.
+CI runs this check, and lint-staged runs it when `package.json` or `pnpm-lock.yaml` changes.
 
 `pnpm.overrides` in `package.json` forces fixed versions of five transitive dependencies.
 Remove an override when its parent package uses a fixed version.

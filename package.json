@@ -19,6 +19,7 @@
     "check:markdown": "markdownlint-cli2",
     "check:prose": "ste-lint --max-warnings 0",
     "check:audit": "node scripts/audit.ts",
+    "check:dedupe": "pnpm dedupe --check",
     "check:lint": "oxlint . && eslint .",
     "check:secrets": "secretlint \"**/*\"",
     "check:architecture": "archlint scan --no-cache",
