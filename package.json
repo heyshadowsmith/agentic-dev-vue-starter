@@ -16,7 +16,8 @@
     "format": "prettier --write --experimental-cli src/",
     "check:format": "prettier --check --experimental-cli src/",
     "check:lint": "oxlint . && eslint .",
-    "check:secrets": "secretlint \"**/*\""
+    "check:secrets": "secretlint \"**/*\"",
+    "prepare": "husky"
   },
   "dependencies": {
     "@ui-sdk/core": "0.1.0-beta.6",
@@ -42,6 +43,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-oxlint": "~1.82.0",
     "eslint-plugin-vue": "~10.11.0",
+    "husky": "9.1.7",
     "jiti": "^2.7.0",
     "jsdom": "^30.0.1",
     "npm-run-all2": "^9.0.3",
