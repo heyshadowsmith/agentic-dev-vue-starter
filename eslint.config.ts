@@ -1,20 +1,24 @@
 import { globalIgnores } from 'eslint/config'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVue from 'eslint-plugin-vue'
+import pluginVueA11y from 'eslint-plugin-vuejs-accessibility'
 import pluginVitest from '@vitest/eslint-plugin'
 import pluginOxlint from 'eslint-plugin-oxlint'
 import skipFormatting from 'eslint-config-prettier/flat'
 import unicorn from 'eslint-plugin-unicorn'
 import { configs as sonarjsConfigs } from 'eslint-plugin-sonarjs'
 import json from '@eslint/json'
+import actionlint from 'eslint-plugin-actionlint'
 import { commentConfigs, commentPlugin } from './eslint/comments.ts'
 import { coreConfigs } from './eslint/core.ts'
+import { workflowConfigs } from './eslint/workflows.ts'
 
 const codeFiles = ['**/*.{vue,ts,mts,tsx}']
 const testFiles = ['src/**/__tests__/*', 'src/**/*.{test,spec}.ts']
 
 const codeConfigs = defineConfigWithVueTs(
   ...pluginVue.configs['flat/recommended'],
+  ...pluginVueA11y.configs['flat/recommended'],
   vueTsConfigs.strictTypeChecked,
   vueTsConfigs.stylisticTypeChecked,
   unicorn.configs.recommended,
@@ -27,6 +31,12 @@ const codeConfigs = defineConfigWithVueTs(
       'max-params': ['error', 4],
       'max-lines-per-function': ['error', { max: 60, skipBlankLines: true }],
       'max-lines': ['error', { max: 300, skipBlankLines: true }],
+    },
+  },
+  {
+    name: 'app/accessibility',
+    rules: {
+      'vuejs-accessibility/label-has-for': ['error', { required: { some: ['nesting', 'id'] } }],
     },
   },
   {
@@ -94,4 +104,6 @@ export default [
     language: 'json/json',
   },
   ...commentConfigs,
+  actionlint.configs.actionlintOnly,
+  ...workflowConfigs,
 ]

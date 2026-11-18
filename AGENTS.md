@@ -58,6 +58,16 @@ With `exactOptionalPropertyTypes`, you can omit an optional prop like `title?: s
 But you cannot give it the value `undefined`.
 If `undefined` is a correct value, declare the prop as `title?: string | undefined`.
 
+`tsconfig.strict.json` also turns on `strictTemplates` for `vue-tsc`.
+The type check fails on unknown components, props, events and directives in templates.
+
+## Accessibility
+
+ESLint examines Vue templates with the recommended rules of `eslint-plugin-vuejs-accessibility`.
+For example, it finds images without `alt`, form controls without a label and click handlers on elements that a keyboard cannot use.
+A label can contain its control, or it can refer to the `id` of the control with `for`.
+The rules cannot find a `for` that refers to an `id` that does not exist.
+
 ## Architecture
 
 `pnpm check:architecture` runs [archlint](https://github.com/archlinter/archlint) with `.archlint.yaml`.
@@ -75,6 +85,23 @@ For this reason, its dead-code detectors are off, and Knip finds dead code.
 
 archlint does not read aliases from this tsconfig setup.
 When you add a path alias to `tsconfig.app.json`, also add it to `aliases` in `.archlint.yaml`.
+
+## Workflows
+
+ESLint examines the GitHub Actions workflows in `.github/workflows/`.
+It runs the official actionlint through `eslint-plugin-actionlint`.
+The plugin downloads actionlint from GitHub Releases on the first run, and it verifies the checksum.
+`eslint/workflows.ts` adds these security rules:
+
+- Pin each `uses` to a full 40-character commit SHA.
+- Do not put `${{ }}` expressions in `run` scripts, and give the value to the script with `env`.
+- Set `persist-credentials: false` on each `actions/checkout` step.
+- Declare top-level `permissions` in each workflow.
+- Do not use the `pull_request_target` trigger.
+
+CI also runs zizmor, which does more security audits than the local rules.
+Comments are not permitted in YAML, thus a pinned SHA does not show its version.
+To find the version, look up the SHA on GitHub.
 
 ## Dead code
 
@@ -129,6 +156,15 @@ The check runs at these times:
 - After each `pnpm install` or `pnpm add`, as a warning only
 - On each commit that changes `package.json` or `pnpm-lock.yaml`, and it stops the commit
 - In CI, and it stops the merge
+
+`pnpm-workspace.yaml` sets `minimumReleaseAge` to 1440 minutes.
+pnpm does not install a package version that is less than 24 hours old.
+If this setting stops an install, stop and ask the user.
+Do not add the package to `minimumReleaseAgeExclude`.
+
+`pnpm-workspace.yaml` also sets `strictDepBuilds`.
+An install fails if a dependency has an install script that nobody approved.
+Examine the script before you approve it.
 
 `pnpm.overrides` in `package.json` forces fixed versions of five transitive dependencies.
 Remove an override when its parent package uses a fixed version.
