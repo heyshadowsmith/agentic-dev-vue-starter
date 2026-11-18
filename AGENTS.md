@@ -61,6 +61,13 @@ If `undefined` is a correct value, declare the prop as `title?: string | undefin
 `tsconfig.strict.json` also turns on `strictTemplates` for `vue-tsc`.
 The type check fails on unknown components, props, events and directives in templates.
 
+## Accessibility
+
+ESLint examines Vue templates with the recommended rules of `eslint-plugin-vuejs-accessibility`.
+For example, it finds images without `alt`, form controls without a label and click handlers on elements that a keyboard cannot use.
+A label can contain its control, or it can refer to the `id` of the control with `for`.
+The rules cannot find a `for` that refers to an `id` that does not exist.
+
 ## Architecture
 
 `pnpm check:architecture` runs [archlint](https://github.com/archlinter/archlint) with `.archlint.yaml`.
