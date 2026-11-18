@@ -15,7 +15,9 @@
     "lint:eslint": "eslint . --fix --cache",
     "format": "prettier --write --experimental-cli src/",
     "check:format": "prettier --check --experimental-cli src/",
-    "check:lint": "oxlint . && eslint ."
+    "check:lint": "oxlint . && eslint .",
+    "check:secrets": "secretlint \"**/*\"",
+    "prepare": "husky"
   },
   "dependencies": {
     "@ui-sdk/core": "0.1.0-beta.6",
@@ -25,6 +27,9 @@
     "vue-router": "^5.3.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@commitlint/types": "^21.2.3",
     "@tailwindcss/vite": "^4.3.5",
     "@tsconfig/node24": "^24.0.5",
     "@types/jsdom": "^30.0.0",
@@ -38,12 +43,14 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-oxlint": "~1.82.0",
     "eslint-plugin-vue": "~10.11.0",
+    "husky": "^9.1.7",
     "jiti": "^2.7.0",
     "jsdom": "^30.0.1",
     "npm-run-all2": "^9.0.3",
     "oxlint": "~1.82.0",
     "prettier": "3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "secretlint": "^14.0.1",
     "tailwindcss": "^4.3.5",
     "typescript": "~6.0.0",
     "vite": "^8.2.2",
