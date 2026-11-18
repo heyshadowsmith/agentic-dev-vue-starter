@@ -47,6 +47,14 @@ Run `pnpm test:coverage` to check the coverage.
 CI also runs it.
 The tool does not measure the shell.
 
+## Tests
+
+A test must contain an assertion, and each `expect` must be in a test.
+Oxlint finds a test without an assertion, a conditional `expect` and an `expect` without a matcher.
+ESLint finds `if`, `switch` and the conditional operator in a test.
+Write one test for each case.
+Use `toStrictEqual`, not `toEqual`, because `toEqual` ignores `undefined` properties and class types.
+
 ## TypeScript
 
 Each tsconfig extends `tsconfig.strict.json`.

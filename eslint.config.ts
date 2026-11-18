@@ -76,6 +76,19 @@ const codeConfigs = defineConfigWithVueTs(
       'vitest/no-disabled-tests': 'error',
       'vitest/no-focused-tests': 'error',
       'vitest/warn-todo': 'error',
+      'vitest/prefer-strict-equal': 'error',
+      'vitest/no-conditional-in-test': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'SwitchStatement',
+          message: 'Do not branch in tests. Write one test per case.',
+        },
+        {
+          selector: 'ConditionalExpression',
+          message: 'Do not branch in tests. Write one test per case.',
+        },
+      ],
     },
   },
 
