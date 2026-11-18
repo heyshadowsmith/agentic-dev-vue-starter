@@ -1,0 +1,14 @@
+config:
+  extends: markdownlint/style/prettier
+
+noInlineConfig: true
+
+customRules:
+  - markdownlint-sentences-per-line
+
+globs:
+  - '**/*.md'
+
+ignores:
+  - 'node_modules/**'
+  - '.claude/skills/**'

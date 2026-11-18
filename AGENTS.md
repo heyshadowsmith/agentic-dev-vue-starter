@@ -2,36 +2,117 @@
 
 ## ui-sdk
 
-Before using ui-sdk, follow the `ui-sdk` skill if it's installed, and read `node_modules/@ui-sdk/vue/docs/llms.txt`.
+Before you use ui-sdk, follow the `ui-sdk` skill if it is installed.
+Also read `node_modules/@ui-sdk/vue/docs/llms.txt`.
 
-To build a new component, also search `node_modules/@ui-sdk/vue/docs/core.md` by heading, and read `node_modules/@ui-sdk/vue/docs/rendering.md` next to it.
+To build a new component, also search `node_modules/@ui-sdk/vue/docs/core.md` by heading.
+Then read `node_modules/@ui-sdk/vue/docs/rendering.md`, which is in the same folder.
 
 ## Commits
 
-Commit messages are a Conventional Commits title only, with no scope, body or trailers, such as `feat: add login form`.
+A commit message is a Conventional Commits title only, for example `feat: add login form`.
+Do not write a scope, a body or trailers.
+
+On each commit, lint-staged fixes and checks the staged files.
+It uses Oxlint, ESLint, markdownlint, ste-lint and Prettier, as `lint-staged.config.ts` shows.
+Then Secretlint scans the staged files.
+A commit fails if a tool cannot fix a problem automatically.
+
+CI runs all checks again.
+It also runs the checks that lint-staged does not run: the type check, the tests, archlint and Knip.
 
 ## Functional Core, Imperative Shell
 
-Put pure logic in `src/core/`. Everything else in `src/` is the shell: components, stores, the router and `main.ts`. The shell may import the core; the core may only import other core files, using `./` or `@/core/` paths.
+Put pure logic in `src/core/`.
+All other code in `src/` is the shell: components, stores, the router and `main.ts`.
+The shell can import the core.
+The core can import only other core files, with `./` or `@/core/` paths.
 
-Core code is synchronous and pure: no Vue, Pinia, router, ui-sdk or npm imports, no browser or timer globals, no `Date.now()`, `new Date()` or `Math.random()`, no `let`, mutation, loops, classes, `throw` or `try`, and no functions that take no parameters or return nothing. Pass time, randomness and data in from the shell. Components never go in `src/core/`. Tests under `src/core/` are exempt from these style rules.
+Core code is synchronous and pure.
+It cannot contain these items:
 
-Core code needs 100% test coverage for lines, branches, functions and statements. Run `pnpm test:coverage` to check; CI runs it too. The shell isn't measured.
+- Imports of Vue, Pinia, the router, ui-sdk or npm packages
+- Browser globals or timer globals
+- `Date.now()`, `new Date()` or `Math.random()`
+- `let`, mutation, loops or classes
+- `throw` or `try`
+- Functions with no parameters, or functions that give no value
+
+Give time, random values and data to the core from the shell.
+Do not put components in `src/core/`.
+These style rules do not apply to tests in `src/core/`.
+
+Core code must have 100% test coverage for lines, branches, functions and statements.
+Run `pnpm test:coverage` to check the coverage.
+CI also runs it.
+The tool does not measure the shell.
 
 ## TypeScript
 
-Every tsconfig extends `tsconfig.strict.json`, which adds checks beyond `strict`, such as `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess` and `erasableSyntaxOnly`, which bans enums and namespaces. Change strictness there, not in the individual tsconfigs.
+Each tsconfig extends `tsconfig.strict.json`.
+That file adds checks to `strict`, for example `exactOptionalPropertyTypes` and `noUncheckedIndexedAccess`.
+It also adds `erasableSyntaxOnly`, which prevents enums and namespaces.
+Change the strictness in `tsconfig.strict.json`, not in the other tsconfig files.
 
-With `exactOptionalPropertyTypes`, an optional prop like `title?: string` can be left out but can't be passed `undefined`. If `undefined` is a valid value, declare it as `title?: string | undefined`.
+With `exactOptionalPropertyTypes`, you can omit an optional prop like `title?: string`.
+But you cannot give it the value `undefined`.
+If `undefined` is a correct value, declare the prop as `title?: string | undefined`.
 
 ## Architecture
 
-`pnpm check:architecture` runs [archlint](https://github.com/archlinter/archlint) with `.archlint.yaml`, and CI fails on any finding: cycles, layer violations (`src/core/` may only import `src/core/`), complexity over 15, nesting deeper than 4, long parameter lists, large files, god modules, barrel files, code clones and side-effect imports.
+`pnpm check:architecture` runs [archlint](https://github.com/archlinter/archlint) with `.archlint.yaml`.
+CI fails if archlint finds one of these problems:
 
-archlint can't read `.vue` files, so imports made only from components are invisible to it. Its dead-code detectors are off for that reason; Knip covers dead code instead. When you add a path alias to `tsconfig.app.json`, add it to `aliases` in `.archlint.yaml` too, because archlint doesn't read aliases from this tsconfig setup.
+- Cycles
+- Layer violations, because `src/core/` can import only `src/core/`
+- Complexity of more than 15, or nesting of more than 4 levels
+- Long parameter lists or large files
+- God modules, barrel files, code clones or side-effect imports
+
+archlint cannot read `.vue` files.
+Thus it does not see imports that only components make.
+For this reason, its dead-code detectors are off, and Knip finds dead code.
+
+archlint does not read aliases from this tsconfig setup.
+When you add a path alias to `tsconfig.app.json`, also add it to `aliases` in `.archlint.yaml`.
 
 ## Dead code
 
-`pnpm check:dead-code` runs [Knip](https://knip.dev), and CI fails on any unused file, export, dependency or type. Knip reads `.vue` files, so code used only by components counts as used. Delete dead code rather than ignoring it.
+`pnpm check:dead-code` runs [Knip](https://knip.dev).
+CI fails if Knip finds an unused file, export, dependency or type.
+Knip reads `.vue` files, thus it knows the code that only components use.
+Delete dead code.
+Do not tell Knip to ignore it.
 
-`knip.json` ignores `@ui-sdk/vue` only because no component uses it yet. Once one does, Knip fails until that entry is removed, so an ignore can't outlive its reason.
+`knip.json` ignores `@ui-sdk/vue` only because no component uses it at this time.
+When a component uses it, Knip fails until you remove that entry.
+Thus an ignore entry cannot stay after its reason is gone.
+
+## Markdown
+
+Markdown is the only place for comments and explanations.
+Write one sentence on each line, because this keeps the diffs small.
+The `markdownlint-sentences-per-line` rule checks this, and lint-staged divides the lines for you on commit.
+
+`pnpm check:markdown` runs markdownlint-cli2 with `.markdownlint-cli2.yaml`.
+It uses the markdownlint style that agrees with Prettier.
+CI fails if markdownlint finds a problem.
+Inline `markdownlint-disable` comments have no effect.
+markdownlint does not examine the vendored skill files in `.claude/skills/`.
+
+## Prose
+
+Write Markdown prose in ASD-STE100 Simplified Technical English (STE).
+`pnpm check:prose` runs [ste-lint](https://github.com/mark1russell7/ste-lint) with `ste.config.json`.
+CI and lint-staged fail on each error and each warning.
+
+These are the most frequent rules:
+
+- An instruction has a maximum of 20 words, and a description has a maximum of 25 words.
+- A paragraph has a maximum of 6 sentences.
+- Do not use semicolons, `-ing` verbs, Latin abbreviations or the modal verbs `should` and `may`.
+- Write "for example", not "such as", and "do not", not "never".
+
+The tool does not use the STE dictionary, because that dictionary is copyrighted.
+Thus it does not find words that STE does not approve.
+`ste.config.json` adds `run` as a technical verb, because it is a usual term in software.
