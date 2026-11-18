@@ -35,3 +35,7 @@ archlint can't read `.vue` files, so imports made only from components are invis
 `pnpm check:dead-code` runs [Knip](https://knip.dev), and CI fails on any unused file, export, dependency or type. Knip reads `.vue` files, so code used only by components counts as used. Delete dead code rather than ignoring it.
 
 `knip.json` ignores `@ui-sdk/vue` only because no component uses it yet. Once one does, Knip fails until that entry is removed, so an ignore can't outlive its reason.
+
+## Markdown
+
+Markdown is the only place comments and explanations belong. `pnpm check:markdown` runs markdownlint-cli2 with `.markdownlint-cli2.yaml`, using markdownlint's Prettier-compatible style, and CI fails on any issue. Inline `markdownlint-disable` comments have no effect. Vendored skill files in `.claude/skills/` aren't linted.

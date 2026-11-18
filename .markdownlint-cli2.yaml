@@ -1,0 +1,11 @@
+config:
+  extends: markdownlint/style/prettier
+
+noInlineConfig: true
+
+globs:
+  - '**/*.md'
+
+ignores:
+  - 'node_modules/**'
+  - '.claude/skills/**'
