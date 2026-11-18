@@ -19,6 +19,7 @@
     "check:lint": "oxlint . && eslint .",
     "check:secrets": "secretlint \"**/*\"",
     "check:architecture": "archlint scan --no-cache",
+    "check:dead-code": "knip --treat-config-hints-as-errors",
     "prepare": "husky"
   },
   "dependencies": {
@@ -54,6 +55,7 @@
     "husky": "9.1.7",
     "jiti": "^2.7.0",
     "jsdom": "^30.0.1",
+    "knip": "^6.45.1",
     "npm-run-all2": "^9.0.3",
     "oxlint": "~1.82.0",
     "prettier": "3.9.6",
