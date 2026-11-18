@@ -5,6 +5,7 @@
     "vitest.config.*",
     "cypress.config.*",
     "eslint.config.*",
+    "eslint/**/*.ts",
     "commitlint.config.*"
   ],
   "compilerOptions": {

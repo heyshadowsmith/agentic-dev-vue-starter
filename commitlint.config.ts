@@ -1,12 +1,12 @@
-import type { UserConfig } from '@commitlint/types'
+import { RuleConfigSeverity, type UserConfig } from '@commitlint/types'
 
 const config: UserConfig = {
   extends: ['@commitlint/config-conventional'],
   rules: {
-    'scope-empty': [2, 'always'],
-    'header-max-length': [2, 'always', 72],
-    'body-empty': [2, 'always'],
-    'footer-empty': [2, 'always'],
+    'scope-empty': [RuleConfigSeverity.Error, 'always'],
+    'header-max-length': [RuleConfigSeverity.Error, 'always', 72],
+    'body-empty': [RuleConfigSeverity.Error, 'always'],
+    'footer-empty': [RuleConfigSeverity.Error, 'always'],
   },
 }
 

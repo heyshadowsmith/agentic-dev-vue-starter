@@ -2,12 +2,14 @@ import { fileURLToPath } from 'node:url'
 import { mergeConfig, defineConfig } from 'vitest/config'
 import viteConfig from './vite.config.ts'
 
+const root = fileURLToPath(new URL('.', import.meta.url))
+
 export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
       environment: 'jsdom',
-      root: fileURLToPath(new URL('./', import.meta.url)),
+      root,
       coverage: {
         provider: 'v8',
         include: ['src/core/**/*.{ts,mts,tsx}'],
