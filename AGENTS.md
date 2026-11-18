@@ -116,3 +116,16 @@ These are the most frequent rules:
 The tool does not use the STE dictionary, because that dictionary is copyrighted.
 Thus it does not find words that STE does not approve.
 `ste.config.json` adds `run` as a technical verb, because it is a usual term in software.
+
+## Dependencies
+
+CI runs `pnpm audit --ignore-unfixable` after the install.
+CI fails if a dependency has a known vulnerability with a fix.
+CI ignores a vulnerability without a fix, and it examines that vulnerability again on each run.
+When a fix becomes available, CI fails until you update the dependency.
+
+`pnpm.overrides` in `package.json` forces fixed versions of four transitive dependencies.
+Remove an override when its parent package uses a fixed version.
+
+Do not commit `pnpm.auditConfig` in `package.json`.
+A local run of `pnpm audit --ignore-unfixable` adds that entry, and it ignores the vulnerability permanently.
