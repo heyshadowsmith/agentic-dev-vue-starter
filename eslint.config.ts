@@ -23,10 +23,60 @@ export default defineConfigWithVueTs(
 
   {
     ...pluginVitest.configs.recommended,
-    files: ['src/**/__tests__/*'],
+    files: ['src/**/__tests__/*', 'src/**/*.{test,spec}.ts'],
   },
 
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
+
+  // Block suppressions. These come after the Oxlint config, which turns off ESLint
+  // rules that Oxlint covers, so it can't switch them off.
+  {
+    name: 'app/no-suppressions',
+    linterOptions: {
+      noInlineConfig: true,
+    },
+    rules: {
+      // Oxlint still honors disable comments, so ban them, along with other tools' ignores.
+      'no-warning-comments': [
+        'error',
+        {
+          location: 'anywhere',
+          terms: [
+            'eslint-disable',
+            'eslint-enable',
+            'oxlint-disable',
+            'oxlint-enable',
+            'prettier-ignore',
+            'secretlint-disable',
+            'istanbul ignore',
+            'v8 ignore',
+            'c8 ignore',
+          ],
+        },
+      ],
+      '@typescript-eslint/ban-ts-comment': [
+        'error',
+        {
+          'ts-check': false,
+          'ts-expect-error': true,
+          'ts-ignore': true,
+          'ts-nocheck': true,
+        },
+      ],
+      // Disable comments in Vue templates go through this rule, not noInlineConfig.
+      // Turning it off makes them do nothing.
+      'vue/comment-directive': 'off',
+    },
+  },
+  {
+    name: 'app/no-skipped-tests',
+    files: ['src/**/__tests__/*', 'src/**/*.{test,spec}.ts'],
+    rules: {
+      'vitest/no-disabled-tests': 'error',
+      'vitest/no-focused-tests': 'error',
+      'vitest/warn-todo': 'error',
+    },
+  },
 
   skipFormatting,
 )
