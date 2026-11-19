@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { repositoryStats, timeSince, type Repository } from '../repository'
+import { compactCount, repositoryActivity, timeSince, type Repository } from '../repository'
 
 const now = 1_000_000_000_000
 const minute = 60_000
@@ -22,20 +22,40 @@ describe('timeSince', () => {
   })
 })
 
-describe('repositoryStats', () => {
-  it('lists the counts and the last push', () => {
-    const repository: Repository = {
-      fullName: 'owner/name',
-      stars: 12,
-      forks: 3,
-      openIssues: 0,
-      pushedAt: now - 2 * 60 * minute,
-    }
-    expect(repositoryStats(repository, now)).toStrictEqual([
-      { label: 'Stars', value: '12' },
-      { label: 'Forks', value: '3' },
-      { label: 'Open issues', value: '0' },
-      { label: 'Last push', value: '2 hours ago' },
+describe('compactCount', () => {
+  it.each([
+    [0, '0'],
+    [999, '999'],
+    [1000, '1k'],
+    [1234, '1.2k'],
+    [15_999, '15.9k'],
+  ])('shows %i as %s', (count, text) => {
+    expect(compactCount(count)).toBe(text)
+  })
+})
+
+describe('repositoryActivity', () => {
+  const repository: Repository = {
+    fullName: 'owner/name',
+    stars: 12,
+    forks: 3,
+    openIssues: 1,
+    pushedAt: now - 2 * 60 * minute,
+  }
+
+  it('lists the last push, the forks and the open issues', () => {
+    expect(repositoryActivity(repository, now)).toStrictEqual([
+      'Last push 2 hours ago',
+      '3 forks',
+      '1 open issue',
+    ])
+  })
+
+  it('uses the singular for one fork and the plural for no issues', () => {
+    expect(repositoryActivity({ ...repository, forks: 1, openIssues: 0 }, now)).toStrictEqual([
+      'Last push 2 hours ago',
+      '1 fork',
+      '0 open issues',
     ])
   })
 })

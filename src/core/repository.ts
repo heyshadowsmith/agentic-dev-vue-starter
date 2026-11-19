@@ -6,10 +6,8 @@ export interface Repository {
   readonly pushedAt: number
 }
 
-export interface RepositoryStat {
-  readonly label: string
-  readonly value: string
-}
+const plural = (count: number, noun: string): string =>
+  `${String(count)} ${noun}${count === 1 ? '' : 's'}`
 
 const units = [
   { name: 'day', milliseconds: 86_400_000 },
@@ -22,12 +20,14 @@ export const timeSince = (then: number, now: number): string => {
   const unit = units.find((candidate) => elapsed >= candidate.milliseconds)
   if (unit === undefined) return 'just now'
   const count = Math.floor(elapsed / unit.milliseconds)
-  return `${String(count)} ${unit.name}${count === 1 ? '' : 's'} ago`
+  return `${plural(count, unit.name)} ago`
 }
 
-export const repositoryStats = (repository: Repository, now: number): readonly RepositoryStat[] => [
-  { label: 'Stars', value: String(repository.stars) },
-  { label: 'Forks', value: String(repository.forks) },
-  { label: 'Open issues', value: String(repository.openIssues) },
-  { label: 'Last push', value: timeSince(repository.pushedAt, now) },
+export const compactCount = (count: number): string =>
+  count < 1000 ? String(count) : `${(Math.floor(count / 100) / 10).toFixed(1).replace(/\.0$/, '')}k`
+
+export const repositoryActivity = (repository: Repository, now: number): readonly string[] => [
+  `Last push ${timeSince(repository.pushedAt, now)}`,
+  plural(repository.forks, 'fork'),
+  plural(repository.openIssues, 'open issue'),
 ]

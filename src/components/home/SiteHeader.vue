@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import ColorSchemeControl from '@/components/ColorSchemeControl.vue'
 import CommandMenu from './CommandMenu.vue'
-import { repositoryUrl, sections } from '@/home/content'
+import { sections } from '@/home/content'
+import GithubLink from './GithubLink.vue'
 </script>
 
 <template>
@@ -21,10 +22,10 @@ import { repositoryUrl, sections } from '@/home/content'
           </li>
         </ul>
       </nav>
-      <div class="ml-auto flex items-center gap-2">
+      <div class="ml-auto flex flex-wrap items-center gap-2">
         <ColorSchemeControl />
         <CommandMenu />
-        <a :href="repositoryUrl" class="text-xs uppercase underline underline-offset-4">GitHub</a>
+        <GithubLink />
       </div>
     </div>
   </header>

@@ -7,6 +7,7 @@ import PromptBuilder from '@/components/home/PromptBuilder.vue'
 import QuestionList from '@/components/home/QuestionList.vue'
 import SiteHeader from '@/components/home/SiteHeader.vue'
 import StackTable from '@/components/home/StackTable.vue'
+import RepositoryActivity from '@/components/home/RepositoryActivity.vue'
 import { repositoryUrl } from '@/home/content'
 </script>
 
@@ -23,9 +24,9 @@ import { repositoryUrl } from '@/home/content'
   </main>
   <footer class="border-t border-(--ui-foreground)">
     <div
-      class="mx-auto flex max-w-6xl flex-wrap justify-between gap-2 px-4 py-4 text-xs text-(--ui-muted-foreground) uppercase"
+      class="mx-auto flex max-w-6xl flex-wrap justify-between gap-x-6 gap-y-3 px-4 py-4 text-xs text-(--ui-muted-foreground) uppercase"
     >
-      <span>Agents read AGENTS.md before they change code.</span>
+      <RepositoryActivity />
       <a :href="`${repositoryUrl}/blob/main/AGENTS.md`" class="underline underline-offset-4"
         >Read AGENTS.md</a
       >
