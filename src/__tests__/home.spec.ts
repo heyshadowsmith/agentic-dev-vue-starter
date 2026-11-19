@@ -1,7 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
 import { quickStart, templateUrl } from '../home/content'
-import { mountApp, stubClipboard } from './mount-app'
+import { mountApp } from './mount-app'
+
+const stubClipboard = (writeText: (text: string) => Promise<void>) => {
+  Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true })
+}
 
 describe('home page', () => {
   it('shows the title and the quick start commands', async () => {
