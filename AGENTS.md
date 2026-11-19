@@ -109,20 +109,6 @@ Prettier adds spaces inside `{{ }}` in `v-pre` text, and this changes the text o
 Thus ESLint does not permit `{{` in an element with `v-pre`.
 To show template syntax on the page, put the text in a script constant and render the constant.
 
-## Layout
-
-`index.html` sets `viewport-fit=cover`, thus on iOS the page fills the screen below the notch and the home indicator.
-`src/assets/main.css` adds the iOS safe-area insets as padding on `body` and as a margin on the ui-sdk toast region.
-Thus the content stays in the safe area.
-
-Do not use `100vh` or `h-screen` for a full-height layout.
-Use `100dvh` or `h-dvh`, because the value changes when the iOS toolbars show or hide.
-Let the document scroll.
-Do not put the page in a container with a fixed height and `overflow-y: auto`.
-
-A sticky or fixed header needs `top: env(safe-area-inset-top)`.
-A sticky header does not stay in position if an ancestor has `overflow` or `transform`.
-
 ## Architecture
 
 `pnpm check:architecture` runs [archlint](https://github.com/archlinter/archlint) with `.archlint.yaml`.
