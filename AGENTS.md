@@ -84,6 +84,11 @@ Thus unicorn finds bugs, for example a mismatched `Map` key, but it does not ask
 
 `tsconfig.strict.json` also turns on `strictTemplates` for `vue-tsc`.
 The type check fails on unknown components, props, events and directives in templates.
+Templates can use `data-*` attributes on HTML elements, for example `data-testid`.
+
+Do not use the non-null assertion `!`, because ESLint does not permit it.
+If a value cannot be `undefined`, use `as` with the type, or check the value first.
+A template string can contain numbers, but not booleans, arrays or values that can be `undefined`.
 
 ## Accessibility
 

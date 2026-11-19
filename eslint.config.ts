@@ -92,6 +92,23 @@ const codeConfigs = defineConfigWithVueTs(
     },
   },
   {
+    name: 'app/typescript-adjustments',
+    rules: {
+      '@typescript-eslint/non-nullable-type-assertion-style': 'off',
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        {
+          allowAny: false,
+          allowBoolean: false,
+          allowNever: false,
+          allowNullish: false,
+          allowNumber: true,
+          allowRegExp: false,
+        },
+      ],
+    },
+  },
+  {
     name: 'app/unicorn-adjustments',
     rules: {
       'unicorn/no-array-sort': 'off',
