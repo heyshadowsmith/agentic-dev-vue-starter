@@ -100,6 +100,14 @@ The rules cannot find a `for` that refers to an `id` that does not exist.
 The rules know the ui-sdk form controls, for example `Select`, `Checkbox` and `DatePicker`.
 Put a ui-sdk control in a `Field` with a `FieldLabel`, or put it in a `<label>`.
 Do not rename a ui-sdk import to get past an accessibility rule.
+The rules do not examine `Toggle` and `FileInput`, because they render buttons.
+A button gets its label from its text, or from `aria-label` if it has no text.
+
+## Templates
+
+Prettier adds spaces inside `{{ }}` in `v-pre` text, and this changes the text on the page.
+Thus ESLint does not permit `{{` in an element with `v-pre`.
+To show template syntax on the page, put the text in a script constant and render the constant.
 
 ## Architecture
 
