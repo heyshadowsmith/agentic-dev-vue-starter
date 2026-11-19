@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ColorSchemeControl from './ColorSchemeControl.vue'
+import ColorSchemeControl from '@/components/ColorSchemeControl.vue'
 import CommandMenu from './CommandMenu.vue'
 import { repositoryUrl, sections } from '@/home/content'
 </script>

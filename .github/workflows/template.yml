@@ -1,0 +1,60 @@
+name: Template
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: template-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  init-project:
+    name: Template setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Remove the showcase
+        run: pnpm init-project --name example-app
+
+      - name: Check formatting
+        run: pnpm check:format
+
+      - name: Lint Markdown
+        run: pnpm check:markdown
+
+      - name: Check prose
+        run: pnpm check:prose
+
+      - name: Lint
+        run: pnpm check:lint
+
+      - name: Check architecture
+        run: pnpm check:architecture
+
+      - name: Check for dead code
+        run: pnpm check:dead-code
+
+      - name: Type check and build
+        run: pnpm build
+
+      - name: Unit tests with core coverage
+        run: pnpm test:coverage

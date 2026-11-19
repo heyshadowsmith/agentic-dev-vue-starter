@@ -24,6 +24,8 @@
     "check:secrets": "secretlint \"**/*\"",
     "check:architecture": "archlint scan --no-cache",
     "check:dead-code": "knip --treat-config-hints-as-errors",
+    "init-project": "node scripts/init-project.ts",
+    "hook:check-edited-file": "node scripts/check-edited-file.ts",
     "prepare": "husky",
     "postinstall": "node scripts/audit.ts --warn-only"
   },

@@ -15,7 +15,3 @@ export const mountApp = async (path = '/') => {
   await flushPromises()
   return wrapper
 }
-
-export const stubClipboard = (writeText: (text: string) => Promise<void>) => {
-  Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true })
-}
