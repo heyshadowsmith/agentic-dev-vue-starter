@@ -20,8 +20,8 @@ const github = (routes: Record<string, () => Response>) =>
 
 const healthyRoutes = {
   '/repos/owner/name': () => Response.json(repositoryBody),
-  [issueSearch]: () => Response.json({ total_count: 0, items: [] }),
-  [pullSearch]: () => Response.json({ total_count: 4, items: [] }),
+  [issueSearch]: () => Response.json({ total_count: 0, incomplete_results: false, items: [] }),
+  [pullSearch]: () => Response.json({ total_count: 4, incomplete_results: false, items: [] }),
 }
 
 const client = (routes: Record<string, () => Response>) =>
@@ -66,11 +66,26 @@ describe('createGithubClient', () => {
   })
 
   it('reports an issue search that does not match the schema', async () => {
-    const routes = { ...healthyRoutes, [issueSearch]: () => Response.json({ items: [] }) }
+    const routes = {
+      ...healthyRoutes,
+      [issueSearch]: () => Response.json({ incomplete_results: false, items: [] }),
+    }
     expect(await client(routes).getRepository('owner/name')).toStrictEqual({
       ok: false,
       error:
         'GitHub sent an unexpected response: total_count: Invalid key: Expected "total_count" but received undefined',
+    })
+  })
+
+  it('rejects a count from an incomplete search', async () => {
+    const routes = {
+      ...healthyRoutes,
+      [pullSearch]: () => Response.json({ total_count: 2, incomplete_results: true, items: [] }),
+    }
+    expect(await client(routes).getRepository('owner/name')).toStrictEqual({
+      ok: false,
+      error:
+        'GitHub sent an unexpected response: response: GitHub returned incomplete search results, so the count is not reliable.',
     })
   })
 

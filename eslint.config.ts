@@ -14,6 +14,7 @@ import { coreConfigs } from './eslint/core.ts'
 import { workflowConfigs } from './eslint/workflows.ts'
 import { templateConfigs } from './eslint/templates.ts'
 import { thirdPartyConfigs } from './eslint/third-parties.ts'
+import { schemaDescriptionConfigs } from './eslint/schema-descriptions.ts'
 
 const isOn = (setting: unknown): boolean => {
   const level: unknown = Array.isArray(setting) ? setting[0] : setting
@@ -210,4 +211,5 @@ export default [
   ...workflowConfigs,
   ...templateConfigs,
   ...thirdPartyConfigs,
+  ...schemaDescriptionConfigs,
 ]

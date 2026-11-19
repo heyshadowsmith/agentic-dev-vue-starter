@@ -82,6 +82,15 @@ Put the interface and its `InjectionKey` in `src/ports/`.
 Components and stores inject the port.
 They do not import a client, and ESLint finds such an import.
 
+A schema checks the shape of the data, but it cannot check the meaning.
+Thus each field in an adapter schema must have a `v.description` in its `v.pipe`.
+Write the meaning that the app uses and the source of that meaning.
+If the vendor does not document the field, say so in the description.
+
+Read the vendor documentation before you map a field to a core type.
+For example, GitHub's `open_issues_count` also counts pull requests.
+ESLint finds a schema field without a description.
+
 The client catches each error and gives a failed `Result` with a message.
 Thus the UI can show the message and a button that tries again.
 Give a timeout to each request with `AbortSignal.timeout`.

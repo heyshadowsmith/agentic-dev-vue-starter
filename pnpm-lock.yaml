@@ -64,6 +64,9 @@ importers:
       '@tsconfig/node24':
         specifier: ^24.0.5
         version: 24.0.6
+      '@types/estree':
+        specifier: ^1.0.10
+        version: 1.0.10
       '@types/jsdom':
         specifier: ^30.0.0
         version: 30.0.0
