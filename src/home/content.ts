@@ -9,7 +9,9 @@ export interface StackItem {
   readonly role: string
 }
 
-export const repositoryUrl = 'https://github.com/heyshadowsmith/agentic-dev-vue-starter'
+export const repositoryName = 'heyshadowsmith/agentic-dev-vue-starter'
+
+export const repositoryUrl = `https://github.com/${repositoryName}`
 
 export const templateUrl = `${repositoryUrl}/generate`
 

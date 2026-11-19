@@ -6,6 +6,7 @@ import { copyText } from '@/lib/clipboard'
 import { checks } from '@/home/checks'
 import { ciSteps } from '@/home/ci-run'
 import { quickStart, templateUrl } from '@/home/content'
+import RepositoryStatus from './RepositoryStatus.vue'
 
 const specs = [
   { label: 'Example checks', value: String(countByStage(checks).all) },
@@ -56,15 +57,18 @@ const specs = [
         <pre class="px-3 py-3" data-testid="quick-start">{{ quickStart }}</pre>
       </div>
     </div>
-    <dl class="grid grid-cols-2 self-start border-t border-l border-(--ui-foreground)">
-      <div
-        v-for="spec in specs"
-        :key="spec.label"
-        class="flex flex-col gap-1 border-r border-b border-(--ui-foreground) p-3"
-      >
-        <dt class="text-xs text-(--ui-muted-foreground) uppercase">{{ spec.label }}</dt>
-        <dd class="text-2xl font-bold tabular-nums">{{ spec.value }}</dd>
-      </div>
-    </dl>
+    <div class="flex flex-col gap-4 self-start">
+      <dl class="grid grid-cols-2 border-t border-l border-(--ui-foreground)">
+        <div
+          v-for="spec in specs"
+          :key="spec.label"
+          class="flex flex-col gap-1 border-r border-b border-(--ui-foreground) p-3"
+        >
+          <dt class="text-xs text-(--ui-muted-foreground) uppercase">{{ spec.label }}</dt>
+          <dd class="text-2xl font-bold tabular-nums">{{ spec.value }}</dd>
+        </div>
+      </dl>
+      <RepositoryStatus />
+    </div>
   </section>
 </template>

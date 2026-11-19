@@ -13,6 +13,7 @@ import { commentConfigs, commentPlugin } from './eslint/comments.ts'
 import { coreConfigs } from './eslint/core.ts'
 import { workflowConfigs } from './eslint/workflows.ts'
 import { templateConfigs } from './eslint/templates.ts'
+import { thirdPartyConfigs } from './eslint/third-parties.ts'
 
 const isOn = (setting: unknown): boolean => {
   const level: unknown = Array.isArray(setting) ? setting[0] : setting
@@ -208,4 +209,5 @@ export default [
   actionlint.configs.actionlintOnly,
   ...workflowConfigs,
   ...templateConfigs,
+  ...thirdPartyConfigs,
 ]

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
 import { createAgent } from '@ui-sdk/vue/agent'
 import { mountApp } from './mount-app'
+import { withFakes } from './fakes'
 
 const agent = createAgent()
 
@@ -13,7 +14,7 @@ const visibleLabels = () =>
 
 describe('agent access', () => {
   it('gives every control a name', async () => {
-    await mountApp()
+    await mountApp('/', [withFakes().plugin])
     const labels = visibleLabels()
     expect(
       labels.filter((label) => !label),
@@ -35,7 +36,7 @@ describe('agent access', () => {
   })
 
   it('fills the prompt form', async () => {
-    const wrapper = await mountApp()
+    const wrapper = await mountApp('/', [withFakes().plugin])
     const result = await agent.act({
       steps: [
         { ref: 'Task', action: 'setValue', args: ['The total is wrong.'] },
@@ -51,7 +52,7 @@ describe('agent access', () => {
   })
 
   it('filters the checks', async () => {
-    const wrapper = await mountApp()
+    const wrapper = await mountApp('/', [withFakes().plugin])
     const result = await agent.act({
       steps: [
         { ref: 'Runs', action: 'setValue', args: ['CI 4'] },
@@ -64,7 +65,7 @@ describe('agent access', () => {
   })
 
   it('switches the color scheme', async () => {
-    await mountApp()
+    await mountApp('/', [withFakes().plugin])
     const result = await agent.act({
       steps: [{ ref: 'Color scheme', action: 'setValue', args: ['dark'] }],
     })
@@ -74,7 +75,7 @@ describe('agent access', () => {
   })
 
   it('selects a path in the project map', async () => {
-    const wrapper = await mountApp()
+    const wrapper = await mountApp('/', [withFakes().plugin])
     const result = await agent.act({
       steps: [{ ref: 'Project files', action: 'setValue', args: ['AGENTS.md'] }],
     })
