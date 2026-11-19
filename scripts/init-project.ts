@@ -15,13 +15,21 @@ const showcaseFiles = [
   'src/core/pipeline.ts',
   'src/core/prompt.ts',
   'src/core/tree.ts',
+  'src/core/repository.ts',
+  'src/core/result.ts',
   'src/core/__tests__',
+  'src/adapters',
+  'src/ports',
+  'src/__tests__/fakes.ts',
+  'src/__tests__/repository-status.spec.ts',
   'src/stores/prompt.ts',
   'src/lib/clipboard.ts',
   'src/lib/sections.ts',
   '.github/workflows/template.yml',
   'scripts/init-project.ts',
 ]
+
+const showcaseDependencies = ['valibot']
 
 const option = (name: string): string | undefined => {
   const index = process.argv.indexOf(name)
@@ -139,7 +147,36 @@ const updateTitle = (title: string) => {
   )
 }
 
+const mainScript = `import './assets/main.css'
+
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+
+import App from './App.vue'
+import router from './router'
+
+const app = createApp(App)
+
+app.use(createPinia())
+app.use(router)
+
+app.mount('#app')
+`
+
+const removeShowcaseDependencies = () => {
+  const pnpm = process.env['npm_execpath']
+  if (pnpm === undefined) {
+    console.log(`Run "pnpm remove ${showcaseDependencies.join(' ')}" to finish.`)
+    return
+  }
+  spawnSync(process.execPath, [pnpm, 'remove', ...showcaseDependencies], {
+    cwd: root,
+    stdio: 'inherit',
+  })
+}
+
 const generated = (name: string, title: string): readonly [string, string][] => [
+  ['src/main.ts', mainScript],
   ['src/views/HomeView.vue', homeView(name, title)],
   ['src/__tests__/home.spec.ts', homeSpec(title)],
   ['src/__tests__/agent.spec.ts', agentSpec],
@@ -151,6 +188,7 @@ const setUp = (name: string, title: string) => {
   for (const [file, content] of generated(name, title)) writeFileSync(at(file), content)
   updatePackage(name)
   updateTitle(title)
+  removeShowcaseDependencies()
   const files = ['package.json', 'index.html', ...generated(name, title).map(([file]) => file)]
   spawnSync(at('node_modules/.bin/prettier'), ['--write', ...files.map((file) => at(file))], {
     stdio: 'inherit',

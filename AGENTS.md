@@ -62,6 +62,34 @@ Run `pnpm test:coverage` to check the coverage.
 CI also runs it.
 The tool does not measure the shell.
 
+## Third-party APIs
+
+Each third-party HTTP API has an adapter in `src/adapters/<vendor>/`.
+Only an adapter can use `fetch`, `XMLHttpRequest`, `WebSocket` or `EventSource`.
+Only an adapter can import `valibot`.
+ESLint finds these items in other files.
+
+An adapter has these files:
+
+- `client.ts` sends requests to the API and gives a `Result` from `src/core/result.ts`.
+- `schema.ts` uses Valibot to check each response and changes it to a core type.
+- `fake.ts` gives the same interface without a network, for tests.
+- `__tests__/client.spec.ts` gives a fake `fetch` to the client and examines the results.
+
+The app owns the interface that an adapter implements.
+Put the interface and its `InjectionKey` in `src/ports/`.
+`src/main.ts` makes the client and gives it to the app with the key.
+Components and stores inject the port.
+They do not import a client, and ESLint finds such an import.
+
+The client catches each error and gives a failed `Result` with a message.
+Thus the UI can show the message and a button that tries again.
+Give a timeout to each request with `AbortSignal.timeout`.
+Keep the domain types and the logic that uses them in `src/core/`.
+
+In a component test, give the fake to `mountApp` as a plugin that gives the port to the app.
+If `valibot` is not installed, run `pnpm add valibot`.
+
 ## Tests
 
 A test must contain an assertion, and each `expect` must be in a test.
