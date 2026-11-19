@@ -12,6 +12,7 @@ import actionlint from 'eslint-plugin-actionlint'
 import { commentConfigs, commentPlugin } from './eslint/comments.ts'
 import { coreConfigs } from './eslint/core.ts'
 import { workflowConfigs } from './eslint/workflows.ts'
+import { templateConfigs } from './eslint/templates.ts'
 
 const isOn = (setting: unknown): boolean => {
   const level: unknown = Array.isArray(setting) ? setting[0] : setting
@@ -38,7 +39,6 @@ const uiSdkControls = [
   'Combobox',
   'DateInput',
   'DatePicker',
-  'FileInput',
   'Input',
   'NumberInput',
   'OtpInput',
@@ -52,7 +52,6 @@ const uiSdkControls = [
   'Textarea',
   'TimeInput',
   'TokenInput',
-  'Toggle',
 ]
 
 const codeConfigs = defineConfigWithVueTs(
@@ -208,4 +207,5 @@ export default [
   ...commentConfigs,
   actionlint.configs.actionlintOnly,
   ...workflowConfigs,
+  ...templateConfigs,
 ]
