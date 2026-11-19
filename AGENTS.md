@@ -152,10 +152,6 @@ Knip reads `.vue` files, thus it knows the code that only components use.
 Delete dead code.
 Do not tell Knip to ignore it.
 
-`knip.json` ignores `@ui-sdk/vue` only because no component uses it at this time.
-When a component uses it, Knip fails until you remove that entry.
-Thus an ignore entry cannot stay after its reason is gone.
-
 ## Markdown
 
 Markdown is the only place for comments and explanations.
