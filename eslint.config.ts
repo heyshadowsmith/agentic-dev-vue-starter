@@ -13,6 +13,21 @@ import { commentConfigs, commentPlugin } from './eslint/comments.ts'
 import { coreConfigs } from './eslint/core.ts'
 import { workflowConfigs } from './eslint/workflows.ts'
 
+const isOn = (setting: unknown): boolean => {
+  const level: unknown = Array.isArray(setting) ? setting[0] : setting
+  return level !== undefined && level !== 'off' && level !== 0
+}
+
+const unicornProblemRules = Object.fromEntries(
+  Object.entries(unicorn.configs.recommended.rules ?? {}).filter(
+    ([name, setting]) =>
+      isOn(setting) &&
+      !isOn(unicorn.configs.unopinionated.rules?.[name]) &&
+      unicorn.rules?.[name.replace('unicorn/', '')]?.meta?.type === 'problem' &&
+      name !== 'unicorn/no-array-callback-reference',
+  ),
+)
+
 const codeFiles = ['**/*.{vue,ts,mts,tsx}']
 const testFiles = ['src/**/__tests__/*', 'src/**/*.{test,spec}.ts']
 
@@ -45,7 +60,8 @@ const codeConfigs = defineConfigWithVueTs(
   ...pluginVueA11y.configs['flat/recommended'],
   vueTsConfigs.strictTypeChecked,
   vueTsConfigs.stylisticTypeChecked,
-  unicorn.configs.recommended,
+  unicorn.configs.unopinionated,
+  { name: 'app/unicorn-problem-rules', rules: unicornProblemRules },
   sonarjsConfigs.recommended,
   {
     name: 'app/limits',
@@ -80,15 +96,8 @@ const codeConfigs = defineConfigWithVueTs(
     rules: {
       'unicorn/no-array-sort': 'off',
       'unicorn/no-array-reverse': 'off',
-      'unicorn/no-array-splice': 'off',
       'unicorn/prefer-array-find': ['error', { checkFromLast: false }],
-      'unicorn/prefer-set-methods': 'off',
-      'unicorn/prefer-group-by': 'off',
       'unicorn/prefer-promise-with-resolvers': 'off',
-      'unicorn/prefer-array-from-async': 'off',
-      'unicorn/consistent-boolean-name': 'off',
-      'unicorn/no-null': 'off',
-      'unicorn/no-array-callback-reference': 'off',
     },
   },
   {
@@ -126,9 +135,7 @@ const codeConfigs = defineConfigWithVueTs(
     files: testFiles,
     rules: {
       'max-lines-per-function': 'off',
-      'unicorn/no-await-expression-member': 'off',
       'unicorn/no-top-level-assignment-in-function': 'off',
-      'unicorn/max-nested-calls': 'off',
       'vitest/no-disabled-tests': 'error',
       'vitest/no-focused-tests': 'error',
       'vitest/warn-todo': 'error',

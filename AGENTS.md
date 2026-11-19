@@ -39,7 +39,6 @@ It cannot contain these items:
 - Functions with no parameters, or functions that give no value
 
 Use `map`, `filter` and `reduce` in the core, because loops are not permitted there.
-`reduce` is permitted only in `src/core/`.
 Give time, random values and data to the core from the shell.
 Do not put components in `src/core/`.
 These style rules do not apply to tests in `src/core/`.
@@ -61,7 +60,7 @@ Use `toStrictEqual`, not `toEqual`, because `toEqual` ignores `undefined` proper
 A development warning from ui-sdk makes the test fail.
 Only this file can assign to globals and contain empty functions.
 The 60-line function limit does not apply to test files.
-Some unicorn rules about style are also off in test files, for example `max-nested-calls`.
+The unicorn rule `no-top-level-assignment-in-function` is off in test files.
 An `expect` can have a message as its second argument, for example `expect(result.ok, result.error).toBe(true)`.
 
 ## TypeScript
@@ -76,9 +75,12 @@ But you cannot give it the value `undefined`.
 If `undefined` is a correct value, declare the prop as `title?: string | undefined`.
 
 The app and the tests use the ES2022 library, because the build supports browsers that do not have ES2023.
-Thus some unicorn rules are off, because they ask for `toSorted`, `toReversed`, `toSpliced` or newer methods.
+Thus some unicorn rules are off, because they ask for `toSorted`, `toReversed` or newer methods.
 Copy an array before you sort or reverse it, for example `[...items].sort()`.
-The unicorn rules `consistent-boolean-name` and `no-null` are also off, because Vue, the DOM and ui-sdk use `null`.
+
+ESLint uses the `unopinionated` preset of `eslint-plugin-unicorn`, which does not enforce a personal style.
+`eslint.config.ts` also turns on each rule of the `recommended` preset that unicorn marks as a problem.
+Thus unicorn finds bugs, for example a mismatched `Map` key, but it does not ask you to rename variables.
 
 `tsconfig.strict.json` also turns on `strictTemplates` for `vue-tsc`.
 The type check fails on unknown components, props, events and directives in templates.
