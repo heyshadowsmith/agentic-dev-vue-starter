@@ -27,7 +27,8 @@ describe('repository data', () => {
     expect(wrapper.findAll('footer li').map((item) => item.text())).toStrictEqual([
       'Last push 2 days ago',
       '7 forks',
-      '3 open issues',
+      '4 open pull requests',
+      '0 open issues',
     ])
   })
 

@@ -3,6 +3,7 @@ export interface Repository {
   readonly stars: number
   readonly forks: number
   readonly openIssues: number
+  readonly openPullRequests: number
   readonly pushedAt: number
 }
 
@@ -29,5 +30,6 @@ export const compactCount = (count: number): string =>
 export const repositoryActivity = (repository: Repository, now: number): readonly string[] => [
   `Last push ${timeSince(repository.pushedAt, now)}`,
   plural(repository.forks, 'fork'),
+  plural(repository.openPullRequests, 'open pull request'),
   plural(repository.openIssues, 'open issue'),
 ]

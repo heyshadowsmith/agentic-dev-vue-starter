@@ -6,7 +6,8 @@ const fakeRepository: Repository = {
   fullName: 'heyshadowsmith/agentic-dev-vue-starter',
   stars: 42,
   forks: 7,
-  openIssues: 3,
+  openIssues: 0,
+  openPullRequests: 4,
   pushedAt: Date.UTC(2026, 10, 19, 12),
 }
 
