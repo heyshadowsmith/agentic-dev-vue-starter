@@ -20,7 +20,7 @@ import {
 import { copyText } from '@/lib/clipboard'
 import { colorScheme, colorSchemes, isColorScheme } from '@/lib/color-scheme'
 import { goToSection, sectionHeading } from '@/lib/sections'
-import { quickStart, repositoryUrl, sections } from '@/home/content'
+import { quickStart, repositoryUrl, sections, templateUrl } from '@/home/content'
 import { usePromptStore } from '@/stores/prompt'
 
 const open = ref(false)
@@ -30,6 +30,7 @@ const store = usePromptStore()
 const actions: Readonly<Record<string, () => unknown>> = {
   'copy:commands': () => copyText(quickStart, 'commands'),
   'copy:prompt': () => copyText(store.prompt, 'prompt'),
+  'open:template': () => window.open(templateUrl, '_blank', 'noopener'),
   'open:github': () => window.open(repositoryUrl, '_blank', 'noopener'),
 }
 
@@ -73,6 +74,7 @@ const run = async (value: string) => {
           </CommandGroup>
           <CommandGroup>
             <CommandGroupLabel>Actions</CommandGroupLabel>
+            <CommandItem value="open:template">Use this template on GitHub</CommandItem>
             <CommandItem value="copy:commands">Copy quick start commands</CommandItem>
             <CommandItem value="copy:prompt">Copy agent prompt</CommandItem>
             <CommandItem value="open:github">Open the repository on GitHub</CommandItem>

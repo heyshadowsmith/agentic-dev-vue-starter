@@ -5,7 +5,7 @@ import { totalSeconds } from '@/core/pipeline'
 import { copyText } from '@/lib/clipboard'
 import { checks } from '@/home/checks'
 import { ciSteps } from '@/home/ci-run'
-import { quickStart } from '@/home/content'
+import { quickStart, templateUrl } from '@/home/content'
 
 const specs = [
   { label: 'Example checks', value: String(countByStage(checks).all) },
@@ -33,9 +33,24 @@ const specs = [
       </p>
       <div class="flex flex-col border border-(--ui-foreground)">
         <div
-          class="flex items-center justify-between border-b border-(--ui-foreground) px-3 py-1.5 text-xs uppercase"
+          class="flex flex-wrap items-center justify-between gap-2 border-b border-(--ui-foreground) px-3 py-2 text-xs uppercase"
         >
-          <span>Quick start</span>
+          <span><span class="text-(--accent)">1</span> Make your own copy</span>
+          <Button>
+            <template #render="{ props }">
+              <a
+                v-bind="props"
+                :href="templateUrl"
+                class="border-(--accent)! bg-(--accent)! font-bold text-(--accent-foreground)! no-underline"
+                >Use this template</a
+              >
+            </template>
+          </Button>
+        </div>
+        <div
+          class="flex flex-wrap items-center justify-between gap-2 border-b border-(--ui-border) px-3 py-2 text-xs uppercase"
+        >
+          <span><span class="text-(--accent)">2</span> Run it</span>
           <Button @click="copyText(quickStart, 'commands')">Copy commands</Button>
         </div>
         <pre class="px-3 py-3" data-testid="quick-start">{{ quickStart }}</pre>

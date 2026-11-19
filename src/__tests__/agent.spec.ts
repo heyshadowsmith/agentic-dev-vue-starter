@@ -21,6 +21,7 @@ describe('agent access', () => {
     ).toStrictEqual([])
     expect(labels).toStrictEqual(
       expect.arrayContaining([
+        'Use this template',
         'Color scheme',
         'Task',
         'Change type',

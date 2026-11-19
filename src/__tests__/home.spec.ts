@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
-import { quickStart } from '../home/content'
+import { quickStart, templateUrl } from '../home/content'
 import { mountApp, stubClipboard } from './mount-app'
 
 describe('home page', () => {
@@ -8,6 +8,13 @@ describe('home page', () => {
     const wrapper = await mountApp()
     expect(wrapper.get('h1').text()).toBe('Every rule is a check.')
     expect(wrapper.get('[data-testid="quick-start"]').text()).toBe(quickStart)
+  })
+
+  it('links to the GitHub template', async () => {
+    const wrapper = await mountApp()
+    const link = wrapper.findAll('a').find((item) => item.text() === 'Use this template')
+    expect(link?.attributes('href')).toBe(templateUrl)
+    expect(templateUrl).toBe('https://github.com/heyshadowsmith/agentic-dev-vue-starter/generate')
   })
 
   it('sends an unknown path to the home page', async () => {

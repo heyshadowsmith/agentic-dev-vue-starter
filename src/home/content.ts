@@ -11,6 +11,8 @@ export interface StackItem {
 
 export const repositoryUrl = 'https://github.com/heyshadowsmith/agentic-dev-vue-starter'
 
+export const templateUrl = `${repositoryUrl}/generate`
+
 export const quickStart = 'pnpm install\npnpm dev'
 
 export const sections = [
