@@ -1,62 +1,68 @@
-export interface Check {
-  readonly tool: string
-  readonly catches: string
+export interface Question {
+  readonly id: string
+  readonly question: string
+  readonly answer: string
 }
 
-export interface Principle {
-  readonly title: string
-  readonly body: string
+export interface StackItem {
+  readonly name: string
+  readonly role: string
 }
 
 export const repositoryUrl = 'https://github.com/heyshadowsmith/agentic-dev-vue-starter'
 
 export const quickStart = 'pnpm install\npnpm dev'
 
-export const commitChecks: readonly Check[] = [
+export const sections = [
+  { id: 'prompt', index: '01', title: 'Prompt' },
+  { id: 'checks', index: '02', title: 'Checks' },
+  { id: 'ci-run', index: '03', title: 'CI run' },
+  { id: 'project', index: '04', title: 'Project map' },
+  { id: 'questions', index: '05', title: 'Why so strict' },
+  { id: 'stack', index: '06', title: 'Stack' },
+] as const
+
+export const questions: readonly Question[] = [
   {
-    tool: 'Oxlint and ESLint',
-    catches: 'Type-aware bugs, accessibility, core purity and comments in code',
+    id: 'comments',
+    question: 'Why ban comments in code?',
+    answer:
+      'Comments drift from the code they describe, and agents trust them. Names and tests say what code does. AGENTS.md and other Markdown files say why.',
   },
-  { tool: 'Prettier', catches: 'Formatting, fixed for you' },
-  { tool: 'markdownlint', catches: 'Markdown style and one sentence per line' },
-  { tool: 'ste-lint', catches: 'Prose that is not Simplified Technical English' },
-  { tool: 'Secretlint', catches: 'Keys and tokens in staged files' },
-  { tool: 'commitlint', catches: 'Commit messages that are not a Conventional Commits title' },
-  { tool: 'pnpm audit', catches: 'Known vulnerabilities that have a fix' },
+  {
+    id: 'prose',
+    question: 'Why Simplified Technical English?',
+    answer:
+      'Short sentences with one meaning each are easier for people and models to follow. ste-lint checks the rules, so nobody has to argue about style.',
+  },
+  {
+    id: 'commits',
+    question: 'Why title-only commits?',
+    answer:
+      'The title says what changed. The pull request holds the discussion. Bodies written by agents tend to repeat the diff.',
+  },
+  {
+    id: 'release-age',
+    question: 'Why wait 24 hours for new package versions?',
+    answer:
+      'Most malicious releases are found and pulled within a day. pnpm refuses versions younger than 24 hours, so a bad release rarely reaches the lock file.',
+  },
+  {
+    id: 'core',
+    question: 'Why a functional core?',
+    answer:
+      'Pure functions are cheap to test to 100%, and an agent cannot hide a side effect in them. The shell stays thin, so most bugs land where tests catch them.',
+  },
 ]
 
-export const ciChecks: readonly Check[] = [
-  { tool: 'vue-tsc', catches: 'Strict types in scripts and templates' },
-  { tool: 'Vitest', catches: 'Failing tests and core coverage below 100%' },
-  { tool: 'archlint', catches: 'Cycles, layer breaks, complexity and code clones' },
-  { tool: 'Knip', catches: 'Unused files, exports, types and dependencies' },
-  { tool: 'actionlint and zizmor', catches: 'Workflow mistakes and security risks' },
-  { tool: 'pnpm dedupe', catches: 'Duplicate versions in the lock file' },
-]
-
-export const principles: readonly Principle[] = [
-  {
-    title: 'Every rule is a check',
-    body: 'Rules live in config, not in review comments. An agent gets the same exact error a person would, before the code leaves the machine.',
-  },
-  {
-    title: 'Functional core, imperative shell',
-    body: 'Pure logic goes in src/core with 100% test coverage. Components, stores and the router stay in the shell.',
-  },
-  {
-    title: 'Markdown is the only place for prose',
-    body: 'Code has no comments. AGENTS.md holds the rules, in plain English that a linter checks.',
-  },
-]
-
-export const stack: readonly string[] = [
-  'Vue 3.5',
-  'TypeScript, strict',
-  'Vite',
-  'Vue Router',
-  'Pinia',
-  'Tailwind CSS 4',
-  'ui-sdk',
-  'Vitest',
-  'pnpm',
+export const stack: readonly StackItem[] = [
+  { name: 'Vue 3.5', role: 'UI framework' },
+  { name: 'TypeScript', role: 'Strictest settings, plus strict templates' },
+  { name: 'Vite', role: 'Dev server and build' },
+  { name: 'ui-sdk', role: 'Accessible, agent-ready components' },
+  { name: 'Tailwind CSS 4', role: 'Utility styles' },
+  { name: 'Vue Router', role: 'Routes' },
+  { name: 'Pinia', role: 'State' },
+  { name: 'Vitest', role: 'Tests and core coverage' },
+  { name: 'pnpm', role: 'Packages, with a 24-hour release age' },
 ]
