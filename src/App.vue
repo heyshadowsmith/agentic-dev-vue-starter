@@ -1,11 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
+import { Toast, ToastClose, ToastDescription, ToastRegion, ToastTitle } from '@ui-sdk/vue/toast'
+import QuickSwitcher from './components/QuickSwitcher.vue'
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div class="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-6">
+    <header class="flex flex-wrap items-center justify-between gap-3">
+      <RouterLink to="/" class="text-lg font-semibold no-underline">Prompt Library</RouterLink>
+      <QuickSwitcher />
+    </header>
+    <main>
+      <RouterView />
+    </main>
+  </div>
+  <ToastRegion>
+    <Toast>
+      <ToastTitle />
+      <ToastDescription />
+      <ToastClose aria-label="Dismiss" />
+    </Toast>
+  </ToastRegion>
 </template>
-
-<style scoped></style>
