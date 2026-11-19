@@ -1,11 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { RouterView } from 'vue-router'
+import { Toast, ToastClose, ToastDescription, ToastRegion, ToastTitle } from '@ui-sdk/vue/toast'
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <RouterView />
+  <ToastRegion data-agent-hidden>
+    <Toast>
+      <ToastTitle />
+      <ToastDescription />
+      <ToastClose aria-label="Dismiss" />
+    </Toast>
+  </ToastRegion>
 </template>
-
-<style scoped></style>
