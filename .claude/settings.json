@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(pnpm check:*)",
+      "Bash(pnpm build)",
+      "Bash(pnpm test:coverage)",
+      "Bash(pnpm test:unit --run)",
+      "Bash(pnpm format)",
+      "Bash(pnpm lint)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && { [ -d node_modules ] || pnpm install --frozen-lockfile; } >&2",
+            "timeout": 300,
+            "statusMessage": "Installing dependencies"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/check-edited-file.ts\"",
+            "timeout": 60,
+            "statusMessage": "Checking the edited file"
+          }
+        ]
+      }
+    ]
+  }
+}

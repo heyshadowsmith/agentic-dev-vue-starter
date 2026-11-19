@@ -21,6 +21,20 @@ A commit fails if a tool cannot fix a problem automatically.
 CI runs all checks again.
 It also runs the checks that lint-staged does not run: the type check, the tests, archlint and Knip.
 
+## Claude Code hooks
+
+`.claude/settings.json` sets hooks for Claude Code.
+After each edit, a hook runs `scripts/check-edited-file.ts` on the edited file.
+The script runs Oxlint and ESLint on code and config files, and markdownlint and ste-lint on Markdown files.
+If a check finds a problem, the hook sends the errors back to the agent.
+Fix them before you continue.
+
+The hook does not run the type check, the tests, archlint or Knip, because they examine the full project.
+Run these checks before you commit.
+
+At the start of a session, a hook runs `pnpm install` if `node_modules` does not exist.
+The settings also let an agent run the `pnpm check:*`, build and test scripts without a permission prompt.
+
 ## Functional Core, Imperative Shell
 
 Put pure logic in `src/core/`.
